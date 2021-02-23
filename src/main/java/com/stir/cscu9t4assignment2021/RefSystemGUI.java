@@ -12,20 +12,24 @@ import javax.swing.*;
 import java.lang.Number;
 
 /**
- *
  * @author saemundur
  */
-public class RefSystemGUI extends JFrame implements ActionListener {
-    
-    private RefCollection bibliography = new RefCollection();
-    
-    public static void main(String[] args) {
-        RefSystemGUI applic = new RefSystemGUI();
-    }
-    public RefSystemGUI() {
-        super("Bibliography");
-    }
-    
-    public void actionPerformed(ActionEvent event) {
-    }
+public class RefSystemGUI extends JFrame implements ActionListener
+{
+	
+	private RefCollection bibliography = new RefCollection();
+	
+	public static void main(String[] args)
+	{
+		RefSystemGUI applic = new RefSystemGUI();
+	}
+	
+	public RefSystemGUI()
+	{
+		super("Bibliography");
+	}
+	
+	public void actionPerformed(ActionEvent event)
+	{
+	}
 }
