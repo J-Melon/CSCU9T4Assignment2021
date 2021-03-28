@@ -7,6 +7,7 @@ package com.stir.cscu9t4assignment2021;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Calendar;
 import javax.swing.*;
 
 /**
@@ -16,12 +17,15 @@ public class RefSystemGUI extends JFrame implements ActionListener
 {
 	//-----GUI DECLARATION-----//
 	//Fields
-	private JTextField JTitle = new JTextField(30);
+	private JTextField JTitle = new JTextField(60);
 	private JTextField JAuthors = new JTextField(30);
 	private JTextField JPublisher = new JTextField(30);
-	private JTextField JPubYear = new JTextField(30);
-	private JTextField JDoi = new JTextField(30);
-	private JTextField JDateAdded = new JTextField(30);
+	private JTextField JPubYear = new JTextField(4);
+	private JTextField JDoi = new JTextField(55);
+	private JTextField JDayAdded = new JTextField(2);
+	private JTextField JMonthAdded = new JTextField(2);
+	private JTextField JYearAdded = new JTextField(4);
+	
 	
 	//Labels
 	private JLabel labTitle = new JLabel(" Title:");
@@ -29,7 +33,9 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JLabel labPublisher = new JLabel(" Publisher:");
 	private JLabel labPubYear = new JLabel(" Year Published:");
 	private JLabel labDoi = new JLabel(" DOI:");
-	private JLabel labDateAdded = new JLabel(" Date Added:");
+	private JLabel labDayAdded = new JLabel(" Day Added:");
+	private JLabel labMonthAdded = new JLabel(" Month Added:");
+	private JLabel labYearAdded = new JLabel(" Year Added:");
 	
 	//Publication type dropdown list
 	String[] pubTypes = new String[] {"Journal", "Conference", "Book"};
@@ -50,9 +56,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	
 	public RefSystemGUI()
 	{
-		//Window title
+		//Window
 		super("Bibliography");
 		setLayout(new FlowLayout());
+		//setPreferredSize(100);
 		
 		//-----GUI LAYOUT-----//
 		//FIELDS
@@ -87,9 +94,15 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		JDoi.setEditable(true);
 		
 		//Date Added
-		add(labDateAdded);
-		add(JDateAdded);
-		JDateAdded.setEditable(true);
+		add(labDayAdded);
+		add(JDayAdded);
+		JDayAdded.setEditable(true);
+		add(labMonthAdded);
+		add(JMonthAdded);
+		JMonthAdded.setEditable(true);
+		add(labYearAdded);
+		add(JYearAdded);
+		JYearAdded.setEditable(true);
 		
 		//BUTTONS
 		add(addR);
@@ -110,6 +123,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		{
 			message = addEntry();
 		}
+		
+		outputArea.setText(message);
+		blankDisplay();
+		
 	}
 	
 	public String addEntry()
@@ -117,32 +134,50 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		String message;
 		
 		String title = JTitle.getText();
-		
-		//List of authors
-		
 		String publisher = JPublisher.getText();
-		
-		//Year of publication
-		
 		String doi = JDoi.getText();
 		
-		//Date added
+		//VALIDATION
+		//Default empty field
+		if (title.isBlank()) { return "Please enter a title."; }
+		else if (publisher.isBlank()) { return "Please enter a publisher."; }
+		else if (doi.isBlank()) { return "Please enter a DOI"; }
 		
-		//DEFAULT EMPTY FIELD VALIDATION
-		if (title.isEmpty())
+		//Publish year
+		int pubYear = 0;
+		try { pubYear = Integer.parseInt(JPubYear.getText()); }
+		catch (NumberFormatException e) { return "Please enter a number for publication year."; }
+		if (! bibliography.isValidYear(pubYear)) { return "PLease enter a non-negative year that is the current year or a previous year."; }
+		
+		//Author
+		String[] authors = bibliography.parseAuthors(JAuthors.getText());
+		if (authors == null) { return "Please enter 10 or less authors separated by commas (,)."; }
+		
+		//Date
+		int day = 0;
+		int month = 0;
+		int year = 0;
+		
+		//If no date entered - use current date
+		if (JDayAdded.getText().isBlank() && JMonthAdded.getText().isBlank() && JMonthAdded.getText().isBlank())
 		{
-			return "Please enter a title.";
-		}
-		else if (publisher.isEmpty())
-		{
-			return "Please enter a publisher.";
-		}
-		else if (doi.isEmpty())
-		{
-			return "Please enter a DOI";
+			day = Calendar.getInstance().get(Calendar.DATE);
+			month = Calendar.getInstance().get(Calendar.MONTH);
+			year = Calendar.getInstance().get(Calendar.YEAR);
 		}
 		
-		return ""; //TODO CHANGE THIS
+		try
+		{
+			day = Integer.parseInt(JDayAdded.getText());
+			month = Integer.parseInt(JMonthAdded.getText());
+			year = Integer.parseInt(JYearAdded.getText());
+		}
+		catch (NumberFormatException e)
+		{
+			return "Please enter a number for the day, month, and year.";
+		}
+		
+		return "Citation added.";
 		
 	}
 	
@@ -154,6 +189,8 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		JPublisher.setText("");
 		JPubYear.setText("");
 		JDoi.setText("");
-		JDateAdded.setText("");
+		JDayAdded.setText("");
+		JMonthAdded.setText("");
+		JYearAdded.setText("");
 	}
 }

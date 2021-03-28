@@ -2,6 +2,7 @@ package com.stir.cscu9t4assignment2021;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Ref
@@ -11,7 +12,7 @@ public class Ref
 	private String doi;
 	private String publisher;
 	private int pubYear;
-	private Date dateAdded;
+	private Calendar dateAdded;
 	
 	/**
 	 * Constructor
@@ -22,7 +23,7 @@ public class Ref
 	 * @param pubYear year of publication
 	 * @param dateAdded date in which citation was added to system
 	 */
-	public Ref(String title, String[] authors, String doi, String publisher, int pubYear, Date dateAdded)
+	public Ref(String title, String[] authors, String doi, String publisher, int pubYear, Calendar dateAdded)
 	{
 		this.title = title;
 		this.authors = authors;
