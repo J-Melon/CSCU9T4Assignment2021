@@ -87,6 +87,7 @@ public class Ref
 	 */
 	public String getCitation()
 	{
-		return getAuthors() + getPubYear() + ". " + getTitle() + ". " + getPublisher() + ". DOI: " + getDoi() + ". Accessed: " + getDateAdded() + ".";
+		return getAuthors() + getPubYear() + ", " + getTitle() + ", " + getPublisher() + ", DOI: " + getDoi()
+				+ ", Accessed: " + getDateAdded() + ".";
 	}
 }

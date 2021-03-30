@@ -47,11 +47,11 @@ public class RefCollectionTest
 		Calendar dateAdded = Calendar.getInstance();
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref ref1 = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
+				"The Company of Biologists Ltd", 2009, dateAdded);
 		Ref ref2 = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1243/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
+				"The Company of Biologists Ltd", 2009, dateAdded);
 		Ref ref3 = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1244/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
+				"The Company of Biologists Ltd", 2009, dateAdded);
 		RefCollection instance = new RefCollection();
 		instance.addCitation(ref1);
 		instance.addCitation(ref2);

@@ -49,7 +49,7 @@ public class RefTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
+				"The Company of Biologists Ltd", 2009, dateAdded);
 		String expResult = "Effects of cocaine on honey bee dance behaviour";
 		String result = instance.getTitle();
 		assertEquals(expResult, result);
@@ -65,7 +65,7 @@ public class RefTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
+				"The Company of Biologists Ltd", 2009, dateAdded);
 		String expResult = "Andrew Barron, Maleszka Barron, ";
 		String result = instance.getAuthors();
 		assertEquals(expResult, result);
@@ -82,7 +82,7 @@ public class RefTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
+				"The Company of Biologists Ltd", 2009, dateAdded);
 		String expResult = "2009";
 		String result = instance.getPubYear();
 		assertEquals(expResult, result);
@@ -98,8 +98,8 @@ public class RefTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
-		String expResult = "Journal of Experimental Biology";
+				"The Company of Biologists Ltd", 2009, dateAdded);
+		String expResult = "The Company of Biologists Ltd";
 		String result = instance.getPublisher();
 		assertEquals(expResult, result);
 	}
@@ -113,7 +113,7 @@ public class RefTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
+				"The Company of Biologists Ltd", 2009, dateAdded);
 		String expResult = "10.1242/jeb.025361";
 		String result = instance.getDoi();
 		assertEquals(expResult, result);
@@ -129,7 +129,7 @@ public class RefTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
+				"The Company of Biologists Ltd", 2009, dateAdded);
 		String expResult = "25/03/2021";
 		String result = instance.getDateAdded();
 		assertEquals(expResult, result);
@@ -145,9 +145,9 @@ public class RefTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
-				"Journal of Experimental Biology", 2009, dateAdded);
-		String expResult = "Andrew Barron, Maleszka Barron, 2009. Effects of cocaine on honey bee dance behaviour. " +
-				"Journal of Experimental Biology. DOI: 10.1242/jeb.025361. Accessed: 25/03/2021.";
+				"The Company of Biologists Ltd", 2009, dateAdded);
+		String expResult = "Andrew Barron, Maleszka Barron, 2009, Effects of cocaine on honey bee dance behaviour, " +
+				"The Company of Biologists Ltd, DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
 	}

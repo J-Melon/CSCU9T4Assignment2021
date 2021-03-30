@@ -13,7 +13,7 @@ import javax.swing.*;
 public class RefSystemGUI extends JFrame implements ActionListener
 {
 	//-----GUI DECLARATION-----//
-	//Fields
+	//OG Fields
 	private JTextField JTitle = new JTextField(60);
 	private JTextField JAuthors = new JTextField(30);
 	private JTextField JPublisher = new JTextField(30);
@@ -23,8 +23,12 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JTextField JMonthAdded = new JTextField(2);
 	private JTextField JYearAdded = new JTextField(4);
 	
+	//Journal Fields
+	private JTextField JJournal = new JTextField(30);
+	private JTextField JVolume = new JTextField(3);
+	private JTextField JIssue = new JTextField(3);
 	
-	//Labels
+	//OG Labels
 	private JLabel labTitle = new JLabel(" Title:");
 	private JLabel labAuthors = new JLabel(" Authors:");
 	private JLabel labPublisher = new JLabel(" Publisher:");
@@ -34,10 +38,15 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JLabel labMonthAdded = new JLabel(" Month Added:");
 	private JLabel labYearAdded = new JLabel(" Year Added:");
 	
+	//Journal Labels
+	private JLabel labJournal = new JLabel(" Journal:");
+	private JLabel labVolume = new JLabel(" Volume:");
+	private JLabel labIssue = new JLabel(" Issue:");
+	
 	//Publication type dropdown list
 	String[] pubTypes = new String[] {"Journal", "Conference", "Book"};
-	JComboBox<String> pubTypeList = new JComboBox<>(pubTypes);
-	private String pubType = "";
+	JComboBox<String> refList = new JComboBox<>(pubTypes);
+	private String refType = "";
 	
 	//Buttons
 	private JButton addR = new JButton("Add");
@@ -56,14 +65,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		//Window
 		super("Bibliography");
 		setLayout(new FlowLayout());
-		//setPreferredSize(100);
 		
 		//-----GUI LAYOUT-----//
-		//FIELDS
+		//OG FIELDS
 		//Publication type dropdown
-		add(pubTypeList);
-		pubTypeList.addActionListener(this);
-		pubTypeList.setSelectedItem("Journal");
+		add(refList);
+		refList.addActionListener(this);
+		refList.setSelectedItem("Journal");
 		
 		//Title
 		add(labTitle);
@@ -101,6 +109,22 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		add(JYearAdded);
 		JYearAdded.setEditable(true);
 		
+		//JOURNAL FIELDS
+		//Journal
+		add(labJournal);
+		add(JJournal);
+		JJournal.setEditable(true);
+		
+		//Volume
+		add(labVolume);
+		add(JVolume);
+		JVolume.setEditable(true);
+		
+		//Issue
+		add(labIssue);
+		add(JIssue);
+		JIssue.setEditable(true);
+		
 		//BUTTONS
 		add(addR);
 		addR.addActionListener(this);
@@ -121,35 +145,54 @@ public class RefSystemGUI extends JFrame implements ActionListener
 			message = addEntry();
 		}
 		
+		if (event.getSource() == refList)
+		{
+			JComboBox<String> combo = (JComboBox<String>) event.getSource();
+			refType = (String) combo.getSelectedItem();
+			System.out.println(combo.getSelectedItem() + " is selected");
+		}
+		
+		//setEditable
+		switch (refType)
+		{
+			case "Journal":
+				JJournal.setEditable(true);
+				JVolume.setEditable(true);
+				JIssue.setEditable(true);
+				break;
+			default:
+				JJournal.setEditable(false);
+				JVolume.setEditable(false);
+				JIssue.setEditable(false);
+		}
+		
 		outputArea.setText(message);
 		blankDisplay();
 	}
 	
 	public String addEntry()
 	{
-		String message;
-		
 		String title = JTitle.getText();
 		String publisher = JPublisher.getText();
 		String doi = JDoi.getText();
 		
 		//VALIDATION
-		//Default empty field
+		//-----Default empty field-----//
 		if (title.isBlank()) { return "Please enter a title."; }
 		else if (publisher.isBlank()) { return "Please enter a publisher."; }
 		else if (doi.isBlank()) { return "Please enter a DOI"; }
 		
-		//Publish year
+		//-----Publish year-----/
 		int pubYear = 0;
 		try { pubYear = Integer.parseInt(JPubYear.getText()); }
 		catch (NumberFormatException e) { return "Please enter a number for publication year."; }
 		if (! bibliography.isValidYear(pubYear)) { return "Please enter a valid year."; }
 		
-		//Author
+		//-----Author-----//
 		String[] authors = bibliography.parseAuthors(JAuthors.getText());
 		if (authors == null) { return "Please enter 10 or less authors separated by commas (,)."; }
 		
-		//Date Added
+		//-----Date Added-----/
 		int day = 0;
 		int month = 0;
 		int year = 0;
@@ -170,19 +213,46 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		}
 		catch (NumberFormatException e)
 		{
-			return "Please enter a number for the day, month, and year.";
+			return "Please enter a valid day, month, and year.";
 		}
 		
 		Calendar dateAdded = bibliography.isValidDate(day, month, year);
 		
 		if (dateAdded == null) { return "Please enter a valid date"; }
 		
+		//-----RefJournal-----//
+		String journal = JJournal.getText();
+		
+		int volume = 0;
+		int issue = 0;
+		
+		try
+		{
+			volume = Integer.parseInt(JVolume.getText());
+			issue = Integer.parseInt(JIssue.getText());
+		}
+		catch (NumberFormatException e)
+		{
+			return "Please enter a valid volume and issue or change reference types.";
+		}
+		
 		//ADD TO COLLECTION
 		Ref r;
-		r = new Ref(title, authors, doi, publisher, pubYear, dateAdded);
+		
+		switch (refType)
+		{
+			case "Journal":
+				r = new RefJournal(title, authors, doi, publisher, pubYear, dateAdded, journal, volume, issue);
+				break;
+			default:
+				System.out.println("Fuk.");
+				r = new Ref(title, authors, doi, publisher, pubYear, dateAdded);
+				break;
+		}
+		
+		//r = new Ref(title, authors, doi, publisher, pubYear, dateAdded);
 		bibliography.addCitation(r);
 		System.out.println(r.getCitation());
-		
 		return "Citation added.";
 	}
 	
@@ -197,5 +267,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		JDayAdded.setText("");
 		JMonthAdded.setText("");
 		JYearAdded.setText("");
+		
+		//RefJournal
+		JJournal.setText("");
+		JVolume.setText("");
+		JIssue.setText("");
 	}
 }
