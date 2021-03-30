@@ -11,11 +11,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Calendar;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * @author saemundur
- */
 public class RefTest
 {
 	
@@ -46,12 +45,14 @@ public class RefTest
 	@Test public void testGetTitle()
 	{
 		System.out.println("getTitle");
-		Ref instance = null;
-		String expResult = "";
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
+				"Journal of Experimental Biology", 2009, dateAdded);
+		String expResult = "Effects of cocaine on honey bee dance behaviour";
 		String result = instance.getTitle();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 	
 	/**
@@ -60,12 +61,15 @@ public class RefTest
 	@Test public void testGetAuthors()
 	{
 		System.out.println("getAuthors");
-		Ref instance = null;
-		String expResult = "";
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
+				"Journal of Experimental Biology", 2009, dateAdded);
+		String expResult = "Andrew Barron, Maleszka Barron, ";
 		String result = instance.getAuthors();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		
 	}
 	
 	/**
@@ -74,12 +78,14 @@ public class RefTest
 	@Test public void testGetPubYear()
 	{
 		System.out.println("getPubYear");
-		Ref instance = null;
-		String expResult = "";
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
+				"Journal of Experimental Biology", 2009, dateAdded);
+		String expResult = "2009";
 		String result = instance.getPubYear();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 	
 	/**
@@ -88,12 +94,14 @@ public class RefTest
 	@Test public void testGetPublisher()
 	{
 		System.out.println("getPublisher");
-		Ref instance = null;
-		String expResult = "";
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
+				"Journal of Experimental Biology", 2009, dateAdded);
+		String expResult = "Journal of Experimental Biology";
 		String result = instance.getPublisher();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 	
 	/**
@@ -101,13 +109,14 @@ public class RefTest
 	 */
 	@Test public void testGetDoi()
 	{
-		System.out.println("getDoi");
-		Ref instance = null;
-		String expResult = "";
+		System.out.println("getDoi");String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
+				"Journal of Experimental Biology", 2009, dateAdded);
+		String expResult = "10.1242/jeb.025361";
 		String result = instance.getDoi();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 	
 	/**
@@ -116,12 +125,14 @@ public class RefTest
 	@Test public void testGetDateAdded()
 	{
 		System.out.println("getDateAdded");
-		Ref instance = null;
-		String expResult = "";
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
+				"Journal of Experimental Biology", 2009, dateAdded);
+		String expResult = "25/03/2021";
 		String result = instance.getDateAdded();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 	
 	/**
@@ -130,12 +141,14 @@ public class RefTest
 	@Test public void testGetCitation()
 	{
 		System.out.println("getCitation");
-		Ref instance = null;
-		String expResult = "";
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
+				"Journal of Experimental Biology", 2009, dateAdded);
+		String expResult = "Andrew Barron, Maleszka Barron, 2009. Effects of cocaine on honey bee dance behaviour. " +
+				"Journal of Experimental Biology. DOI: 10.1242/jeb.025361. Accessed: 25/03/2021.";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
-	
 }

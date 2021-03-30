@@ -19,7 +19,7 @@ public class RefCollection
 	 * Adds citation (reference) to reference list
 	 * @param reference citation to be added
 	 */
-	public void addCite(Ref reference)
+	public void addCitation(Ref reference)
 	{
 		refList.add(reference);
 	}
@@ -37,6 +37,7 @@ public class RefCollection
 		char[] authorCh = authorStr.toCharArray();
 	
 		int count = 0; //Counts number of authors added
+		boolean lastComma = false; //Accounts for space after comma
 		
 		//Splits author string and puts into array
 		for (int i = 0; i < authorCh.length - 1; i++)
@@ -44,22 +45,29 @@ public class RefCollection
 			if (authorCh[i] == ',')
 			{
 				count++;
-				currentAuthor.setLength(0);
+				lastComma = true;
 				
 				if (count <= MAX_AUTHORS)
 				{
-					authors[count] = currentAuthor.toString();
+					authors[count - 1] = currentAuthor.toString();
+					currentAuthor.setLength(0);
 				}
 				else
 				{
 					return null; //Failed
 				}
 			}
+			else if (lastComma && authorCh[i] == ' ') //Discards comma space
+			{
+				lastComma = false;
+			}
 			else
 			{
 				currentAuthor.append(authorCh[i]);
 			}
 		}
+		
+		authors[count] = currentAuthor.toString();
 		
 		return authors; //Passed
 	}
@@ -81,7 +89,7 @@ public class RefCollection
 	 * @param year a year
 	 * @return
 	 */
-	public boolean isValidDate(int day, int month, int year)
+	public Calendar isValidDate(int day, int month, int year)
 	{
 		Calendar calendar = Calendar.getInstance();
 		calendar.setLenient(false);
@@ -89,12 +97,22 @@ public class RefCollection
 		try
 		{
 			calendar.set(year, month, day);
+			calendar.getTime(); //To throw exception as check done lazily
 		}
 		catch (Exception e)
 		{
-			return false;
+			return null;
 		}
 		
-		return true;
+		return calendar;
+	}
+	
+	/**
+	 * Counts the number of entries
+	 * @return number of entries
+	 */
+	public int getNumberOfEntries()
+	{
+		return refList.size();
 	}
 }

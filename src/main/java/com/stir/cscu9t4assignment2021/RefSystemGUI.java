@@ -10,9 +10,6 @@ import java.awt.event.*;
 import java.util.Calendar;
 import javax.swing.*;
 
-/**
- * @author saemundur
- */
 public class RefSystemGUI extends JFrame implements ActionListener
 {
 	//-----GUI DECLARATION-----//
@@ -126,7 +123,6 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		
 		outputArea.setText(message);
 		blankDisplay();
-		
 	}
 	
 	public String addEntry()
@@ -147,13 +143,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		int pubYear = 0;
 		try { pubYear = Integer.parseInt(JPubYear.getText()); }
 		catch (NumberFormatException e) { return "Please enter a number for publication year."; }
-		if (! bibliography.isValidYear(pubYear)) { return "PLease enter a non-negative year that is the current year or a previous year."; }
+		if (! bibliography.isValidYear(pubYear)) { return "Please enter a valid year."; }
 		
 		//Author
 		String[] authors = bibliography.parseAuthors(JAuthors.getText());
 		if (authors == null) { return "Please enter 10 or less authors separated by commas (,)."; }
 		
-		//Date
+		//Date Added
 		int day = 0;
 		int month = 0;
 		int year = 0;
@@ -177,8 +173,17 @@ public class RefSystemGUI extends JFrame implements ActionListener
 			return "Please enter a number for the day, month, and year.";
 		}
 		
-		return "Citation added.";
+		Calendar dateAdded = bibliography.isValidDate(day, month, year);
 		
+		if (dateAdded == null) { return "Please enter a valid date"; }
+		
+		//ADD TO COLLECTION
+		Ref r;
+		r = new Ref(title, authors, doi, publisher, pubYear, dateAdded);
+		bibliography.addCitation(r);
+		System.out.println(r.getCitation());
+		
+		return "Citation added.";
 	}
 	
 	/** Blanks all fields in GUI */

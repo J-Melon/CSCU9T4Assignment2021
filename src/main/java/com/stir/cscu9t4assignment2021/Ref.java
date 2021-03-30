@@ -44,9 +44,9 @@ public class Ref
 	{
 		StringBuilder sb = new StringBuilder();
 		
-		for (int i = 0; i < authors.length - 1; i++)
+		for (String author : authors)
 		{
-			sb.append(authors[i]).append(", ");
+			sb.append(author).append(", ");
 		}
 		
 		return sb.toString();
@@ -73,19 +73,20 @@ public class Ref
 	/** @return date in which citation was added to system */
 	public String getDateAdded()
 	{
+		Date date = dateAdded.getTime();
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		return dateFormat.format(dateAdded);
+		return dateFormat.format(date);
 	}
 	
 	/**
 	 * Gets a citation and concatenated it into a string.
 	 * Format:
-	 * "Bininda-Emonds, 2007. The delayed rise of present-day mammals.
+	 * "Olaf Bininda-Emonds, 2007. The delayed rise of present-day mammals.
 	 * Nature Research. DOI: https://doi.org/10.1038/nature05634. Accessed: 05/12/2020.
 	 * @return citation string
 	 */
 	public String getCitation()
 	{
-		return getAuthors() + pubYear + ". " + title + ". " + publisher + ". DOI: " + doi + ". Accessed: " + dateAdded;
+		return getAuthors() + getPubYear() + ". " + getTitle() + ". " + getPublisher() + ". DOI: " + getDoi() + ". Accessed: " + getDateAdded() + ".";
 	}
 }
