@@ -57,8 +57,8 @@ public class RefJournal extends Ref
 	@Override
 	public String getCitation()
 	{
-		return getAuthors() + getPubYear() + ", " + getTitle() + ", " + getJournal() + ", "
-				+ getPublisher() + ", vol. " + getVolume() + ", no. " + getIssue() + ", DOI: " + getDoi()
-				+ ", Accessed: " + getDateAdded() + ".";
+		return getAuthors() + getPubYear() + ", " + getTitle() + ", " + getJournal() + ", " + getPublisher() +
+				", vol. " + getVolume() + ", no. " + getIssue() + ", DOI: " + getDoi() + ", Accessed: " +
+				getDateAdded() + ".";
 	}
 }

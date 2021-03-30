@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Calendar;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -45,12 +47,15 @@ public class RefJournalTest
 	@Test public void testGetJournal()
 	{
 		System.out.println("getJournal");
-		RefJournal instance = null;
-		String expResult = "";
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		RefJournal instance = new RefJournal("Effects of cocaine on honey bee dance behaviour", authors,
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", 2009, dateAdded,
+				"Journal of Experimental Biology", 212, 2);
+		String expResult = "Journal of Experimental Biology";
 		String result = instance.getJournal();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 	
 	/**
@@ -59,12 +64,17 @@ public class RefJournalTest
 	@Test public void testGetCitation()
 	{
 		System.out.println("getCitation");
-		RefJournal instance = null;
-		String expResult = "";
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		RefJournal instance = new RefJournal("Effects of cocaine on honey bee dance behaviour", authors,
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", 2009, dateAdded,
+				"Journal of Experimental Biology", 212, 2);
+		String expResult = "Andrew Barron, Maleszka Barron, 2009, Effects of cocaine on honey bee dance behaviour, " +
+				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
+				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 	
 }
