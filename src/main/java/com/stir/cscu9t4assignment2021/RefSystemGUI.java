@@ -28,6 +28,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JTextField JVolume = new JTextField(3);
 	private JTextField JIssue = new JTextField(3);
 	
+	//Conference Fields
+	private JTextField JVenue = new JTextField(15);
+	private JTextField JLocation = new JTextField(15);
+	
 	//OG Labels
 	private JLabel labTitle = new JLabel(" Title:");
 	private JLabel labAuthors = new JLabel(" Authors:");
@@ -42,6 +46,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JLabel labJournal = new JLabel(" Journal:");
 	private JLabel labVolume = new JLabel(" Volume:");
 	private JLabel labIssue = new JLabel(" Issue:");
+	
+	//Conference Fields
+	private JLabel labVenue = new JLabel(" Venue:");
+	private JLabel labLocation = new JLabel(" Location:");
 	
 	//Publication type dropdown list
 	String[] pubTypes = new String[] {"Journal", "Conference", "Book"};
@@ -109,7 +117,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		add(JYearAdded);
 		JYearAdded.setEditable(true);
 		
-		//JOURNAL FIELDS
+		//JOURNAL FIELDS - DEFAULT
 		//Journal
 		add(labJournal);
 		add(JJournal);
@@ -124,6 +132,17 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		add(labIssue);
 		add(JIssue);
 		JIssue.setEditable(true);
+		
+		//CONFERENCE FIELDS
+		//Venue
+		add(labVenue);
+		add(JVenue);
+		JVenue.setEditable(false);
+		
+		//Location
+		add(labLocation);
+		add(JLocation);
+		JLocation.setEditable(false);
 		
 		//BUTTONS
 		add(addR);
@@ -159,11 +178,27 @@ public class RefSystemGUI extends JFrame implements ActionListener
 				JJournal.setEditable(true);
 				JVolume.setEditable(true);
 				JIssue.setEditable(true);
+				//Conference blank
+				JVenue.setEditable(false);
+				JLocation.setEditable(false);
 				break;
-			default:
+			case "Conference":
+				JVenue.setEditable(true);
+				JLocation.setEditable(true);
+				//Journal blank
 				JJournal.setEditable(false);
 				JVolume.setEditable(false);
 				JIssue.setEditable(false);
+				break;
+			default:
+				//Journal blank
+				JJournal.setEditable(false);
+				JVolume.setEditable(false);
+				JIssue.setEditable(false);
+				//Conference blank
+				JVenue.setEditable(false);
+				JLocation.setEditable(false);
+				break;
 		}
 		
 		outputArea.setText(message);
@@ -218,10 +253,12 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		
 		Calendar dateAdded = bibliography.isValidDate(day, month, year);
 		
-		if (dateAdded == null) { return "Please enter a valid date"; }
+		if (dateAdded == null) { return "Please enter a valid date."; }
 		
 		//-----RefJournal-----//
 		String journal = JJournal.getText();
+		
+		if (journal.isBlank()) { return "Please enter a journal."; }
 		
 		int volume = 0;
 		int issue = 0;
@@ -236,6 +273,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 			return "Please enter a valid volume and issue or change reference types.";
 		}
 		
+		//----- RefConference -----//
+		String venue = JVenue.getText();
+		String location = JLocation.getText();
+		
+		if (venue.isBlank()) { return "Please enter a venue."; }
+		if (location.isBlank()) { return "Please enter a location.";}
+		
 		//ADD TO COLLECTION
 		Ref r;
 		
@@ -244,13 +288,15 @@ public class RefSystemGUI extends JFrame implements ActionListener
 			case "Journal":
 				r = new RefJournal(title, authors, doi, publisher, pubYear, dateAdded, journal, volume, issue);
 				break;
+			case "Conference":
+				r = new RefConference(title, authors, doi, publisher, pubYear, dateAdded, venue, location);
+				break;
 			default:
-				System.out.println("Fuk.");
+				System.out.println("Something went wrong. Please try again.");
 				r = new Ref(title, authors, doi, publisher, pubYear, dateAdded);
 				break;
 		}
 		
-		//r = new Ref(title, authors, doi, publisher, pubYear, dateAdded);
 		bibliography.addCitation(r);
 		System.out.println(r.getCitation());
 		return "Citation added.";
@@ -272,5 +318,9 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		JJournal.setText("");
 		JVolume.setText("");
 		JIssue.setText("");
+		
+		//RefConference
+		JVenue.setText("");
+		JLocation.setText("");
 	}
 }
