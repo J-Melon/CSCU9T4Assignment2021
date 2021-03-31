@@ -109,7 +109,8 @@ public class RefTest
 	 */
 	@Test public void testGetDoi()
 	{
-		System.out.println("getDoi");String[] authors = {"Andrew Barron", "Maleszka Barron"};
+		System.out.println("getDoi");
+		String[] authors = {"Andrew Barron", "Maleszka Barron"};
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
