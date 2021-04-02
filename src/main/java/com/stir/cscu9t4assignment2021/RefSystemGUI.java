@@ -14,7 +14,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 {
 	//-----GUI DECLARATION-----//
 	//OG Fields
-	private JTextField JTitle = new JTextField(60);
+	private JTextField JTitle = new JTextField(59);
 	private JTextField JAuthors = new JTextField(30);
 	private JTextField JPublisher = new JTextField(30);
 	private JTextField JPubYear = new JTextField(4);
@@ -24,13 +24,17 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JTextField JYearAdded = new JTextField(4);
 	
 	//Journal Fields
-	private JTextField JJournal = new JTextField(30);
+	private JTextField JJournal = new JTextField(31);
 	private JTextField JVolume = new JTextField(3);
 	private JTextField JIssue = new JTextField(3);
 	
 	//Conference Fields
 	private JTextField JVenue = new JTextField(15);
-	private JTextField JLocation = new JTextField(15);
+	private JTextField JLocation = new JTextField(29);
+	
+	//Book Chapter Fields
+	private JTextField JBook = new JTextField(15);
+	private JTextField JEditor = new JTextField(15);
 	
 	//OG Labels
 	private JLabel labTitle = new JLabel(" Title:");
@@ -47,13 +51,17 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JLabel labVolume = new JLabel(" Volume:");
 	private JLabel labIssue = new JLabel(" Issue:");
 	
-	//Conference Fields
+	//Conference Labels
 	private JLabel labVenue = new JLabel(" Venue:");
 	private JLabel labLocation = new JLabel(" Location:");
 	
+	//Book Chapter Labels
+	private JLabel labBook = new JLabel(" Book:");
+	private JLabel labEditor = new JLabel(" Editor:");
+	
 	//Publication type dropdown list
-	String[] pubTypes = new String[] {"Journal", "Conference", "Book"};
-	JComboBox<String> refList = new JComboBox<>(pubTypes);
+	String[] pubTypes = new String[] {"Journal", "Conference", "Book Chapter"};
+	JComboBox<String> JRefList = new JComboBox<>(pubTypes);
 	private String refType = "";
 	
 	//Buttons
@@ -77,9 +85,9 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		//-----GUI LAYOUT-----//
 		//OG FIELDS
 		//Publication type dropdown
-		add(refList);
-		refList.addActionListener(this);
-		refList.setSelectedItem("Journal");
+		add(JRefList);
+		JRefList.addActionListener(this);
+		JRefList.setSelectedItem("Journal");
 		
 		//Title
 		add(labTitle);
@@ -144,13 +152,24 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		add(JLocation);
 		JLocation.setEditable(false);
 		
+		//BOOK CHAPTER FIELDS
+		//Book
+		add(labBook);
+		add(JBook);
+		JBook.setEditable(false);
+		
+		//Editor
+		add(labEditor);
+		add(JEditor);
+		JEditor.setEditable(false);
+		
 		//BUTTONS
 		add(addR);
 		addR.addActionListener(this);
 		
 		add(outputArea);
 		outputArea.setEditable(false);
-		setSize(720, 250);
+		setSize(720, 300);
 		setVisible(true);
 		blankDisplay();
 	}
@@ -161,14 +180,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		
 		if (event.getSource() == addR)
 		{
-			message = addEntry();
+			message = addCitation();
 		}
 		
-		if (event.getSource() == refList)
+		if (event.getSource() == JRefList)
 		{
 			JComboBox<String> combo = (JComboBox<String>) event.getSource();
 			refType = (String) combo.getSelectedItem();
-			System.out.println(combo.getSelectedItem() + " is selected");
 		}
 		
 		//setEditable
@@ -181,6 +199,9 @@ public class RefSystemGUI extends JFrame implements ActionListener
 				//Conference blank
 				JVenue.setEditable(false);
 				JLocation.setEditable(false);
+				//BookChap blank
+				JBook.setEditable(false);
+				JEditor.setEditable(false);
 				break;
 			case "Conference":
 				JVenue.setEditable(true);
@@ -189,8 +210,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 				JJournal.setEditable(false);
 				JVolume.setEditable(false);
 				JIssue.setEditable(false);
+				//BookChap blank
+				JBook.setEditable(false);
+				JEditor.setEditable(false);
 				break;
-			default:
+			case "Book Chapter":
+				JBook.setEditable(true);
+				JEditor.setEditable(true);
 				//Journal blank
 				JJournal.setEditable(false);
 				JVolume.setEditable(false);
@@ -198,6 +224,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 				//Conference blank
 				JVenue.setEditable(false);
 				JLocation.setEditable(false);
+			default:
 				break;
 		}
 		
@@ -205,7 +232,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		blankDisplay();
 	}
 	
-	public String addEntry()
+	public String addCitation()
 	{
 		String title = JTitle.getText();
 		String publisher = JPublisher.getText();
@@ -280,6 +307,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		if (venue.isBlank()) { return "Please enter a venue."; }
 		if (location.isBlank()) { return "Please enter a location.";}
 		
+		//----- RefBookChap -----//
+		String book = JBook.getText();
+		String editor = JEditor.getText();
+		
+		if (book.isBlank()) { return "Please enter a book title."; }
+		if (editor.isBlank()) { return "Please enter an editor.";}
+		
 		//ADD TO COLLECTION
 		Ref r;
 		
@@ -290,6 +324,9 @@ public class RefSystemGUI extends JFrame implements ActionListener
 				break;
 			case "Conference":
 				r = new RefConference(title, authors, doi, publisher, pubYear, dateAdded, venue, location);
+				break;
+			case "Book Chapter":
+				r = new RefBookChapter(title, authors, doi, publisher, pubYear, dateAdded, book, editor);
 				break;
 			default:
 				System.out.println("Something went wrong. Please try again.");
@@ -322,5 +359,67 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		//RefConference
 		JVenue.setText("");
 		JLocation.setText("");
+		
+		//RefBookChap
+		JBook.setText("");
+		JEditor.setText("");
+	}
+	
+	/** Enters text into GUI (Journal) */
+	public void enterJournal(String title, String authors, String doi, String publisher, String pubYear, String dayAdded,
+							 String monthAdded, String yearAdded, String journal, String volume, String issue)
+	{
+		JRefList.setSelectedItem("Journal");
+		JTitle.setText(title);
+		JAuthors.setText(authors);
+		JPublisher.setText(publisher);
+		JPubYear.setText(pubYear);
+		JDoi.setText(doi);
+		JDayAdded.setText(dayAdded);
+		JMonthAdded.setText(monthAdded);
+		JYearAdded.setText(yearAdded);
+		
+		//RefJournal
+		JJournal.setText(journal);
+		JVolume.setText(volume);
+		JIssue.setText(issue);
+	}
+	
+	/** Enters text into GUI (Conference) */
+	public void enterConference(String title, String authors, String doi, String publisher, String pubYear, String dayAdded,
+							 String monthAdded, String yearAdded, String venue, String location)
+	{
+		JRefList.setSelectedItem("Conference");
+		JTitle.setText(title);
+		JAuthors.setText(authors);
+		JPublisher.setText(publisher);
+		JPubYear.setText(pubYear);
+		JDoi.setText(doi);
+		JDayAdded.setText(dayAdded);
+		JMonthAdded.setText(monthAdded);
+		JYearAdded.setText(yearAdded);
+		
+		JVenue.setText(venue);
+		JLocation.setText(location);
+		addR.doClick();
+	}
+	
+	/** Enters text into GUI (Book Chapter) */
+	public void enterBookChapter(String title, String authors, String doi, String publisher, String pubYear, String dayAdded,
+								String monthAdded, String yearAdded,String book, String editor)
+	{
+		JRefList.setSelectedItem("Book Chapter");
+		JTitle.setText(title);
+		JAuthors.setText(authors);
+		JPublisher.setText(publisher);
+		JPubYear.setText(pubYear);
+		JDoi.setText(doi);
+		JDayAdded.setText(dayAdded);
+		JMonthAdded.setText(monthAdded);
+		JYearAdded.setText(yearAdded);
+		
+		JBook.setText(book);
+		JEditor.setText(editor);
+		addR.doClick();
 	}
 }

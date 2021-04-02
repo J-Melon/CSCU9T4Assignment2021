@@ -65,4 +65,9 @@ public class RefSystemGUITest
 		instance.actionPerformed(event);
 	}
 	
+	@Test public void testAddCitationTitle()
+	{
+		System.out.println("title");
+	}
+	
 }

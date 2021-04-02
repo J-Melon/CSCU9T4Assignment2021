@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Calendar;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -40,49 +42,54 @@ public class RefBookChapterTest
 	}
 	
 	/**
-	 * Test of
-	 */
-	
-	/**
 	 * Test of getBook method, of class RefBookChapter.
-	 * Also tests the constructor without date added
 	 */
 	@Test public void testGetBook()
 	{
 		System.out.println("getBook");
-		String title = "Some Book Chapter";
-		String book = "Some book about stuff";
-		String authors = "Saemi Haraldsson, Ragnheidur Brynjolfsdottir";
-		String doi = "10.123456/9876";
-		String publisher = "Springer";
-		String editor = "Scooby Doo";
-		int pubyear = 2002;
-		RefBookChapter instance = new RefBookChapter(title, book, authors, doi, publisher, editor, pubyear);
-		String expResult = "Some book about stuff";
+		String[] authors = {"Marianne Lien"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		RefBookChapter instance = new RefBookChapter("Becoming Sentient: Choreographies of Caring and Killing",
+				authors, "https://doi.org/10.1525/9780520961838", "University of California Press",
+				2015, dateAdded, "Becoming salmon", "Darra Goldstein");
+		String expResult = "Becoming salmon";
 		String result = instance.getBook();
 		assertEquals(expResult, result);
 	}
 	
 	/**
+	 * Test of getEditor method, of class RefBookChapter.
+	 */
+	@Test public void testGetEditor()
+	{
+		System.out.println("getBook");
+		String[] authors = {"Marianne Lien"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		RefBookChapter instance = new RefBookChapter("Becoming Sentient: Choreographies of Caring and Killing",
+				authors, "https://doi.org/10.1525/9780520961838", "University of California Press",
+				2015, dateAdded, "Becoming salmon", "Darra Goldstein");
+		String expResult = "Darra Goldstein";
+		String result = instance.getEditor();
+		assertEquals(expResult, result);
+	}
+	
+	/**
 	 * Test of getCitation method, of class RefBookChapter.
-	 * Also tests the constructor without date added
 	 */
 	@Test public void testGetCitation()
 	{
 		System.out.println("getCitation");
-		String title = "Some Book Chapter";
-		String book = "Some book about stuff";
-		String authors = "Saemi Haraldsson, Ragnheidur Brynjolfsdottir";
-		String doi = "10.123456/9876";
-		String publisher = "Springer";
-		String editor = "Scooby Doo";
-		int pubyear = 2002;
-		int day = 1;
-		int month = 1;
-		int year = 2021;
-		RefBookChapter instance = new RefBookChapter(title, book, authors, doi, publisher, editor, pubyear, day, month, year);
-		String expResult = "Saemi Haraldsson, Ragnheidur Brynjolfsdottir (2002)," + " Some Book Chapter, in Some book about stuff, Springer ," + " " +
-				"ed: Scooby Doo, doi:10.123456/9876";
+		String[] authors = {"Marianne Lien"};
+		Calendar dateAdded = Calendar.getInstance();;
+		dateAdded.set(2021, Calendar.MARCH, 25);
+		RefBookChapter instance = new RefBookChapter("Becoming Sentient: Choreographies of Caring and Killing",
+				authors, "https://doi.org/10.1525/9780520961838", "University of California Press",
+				2015, dateAdded, "Becoming salmon", "Darra Goldstein");
+		String expResult = "Marianne Lien, 2015, 'Becoming Sentient: Choreographies of Caring and Killing', " +
+				"in Darra Goldstein (ed) Becoming " + "salmon, University of California Press, " +
+				"DOI: https://doi.org/10.1525/9780520961838, Accessed: 25/03/2021.";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
 	}
