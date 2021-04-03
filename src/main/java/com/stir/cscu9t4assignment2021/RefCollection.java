@@ -1,5 +1,6 @@
 package com.stir.cscu9t4assignment2021;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class RefCollection
 				count++;
 				lastComma = true;
 				
-				if (count <= MAX_AUTHORS)
+				if (count < MAX_AUTHORS)
 				{
 					authors[count - 1] = currentAuthor.toString();
 					currentAuthor.setLength(0);
@@ -67,7 +68,7 @@ public class RefCollection
 			}
 		}
 		
-		authors[count] = currentAuthor.toString();
+		authors[count] = currentAuthor.toString(); //For last author (no comma)
 		
 		return authors; //Passed
 	}

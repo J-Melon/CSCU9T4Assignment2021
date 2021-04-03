@@ -41,7 +41,7 @@ public class RefConference extends Ref
 	/**
 	 * Gets a citation and concatenated it into a string.
 	 * Format:
-	 * Eric Holgate, Cachola Holgate, 2018, Why swear? analyzing and inferring the intentions of vulgar expressions,
+	 * Eric Holgate, Isabel Cachola, 2018, Why swear? analyzing and inferring the intentions of vulgar expressions,
 	 * Association for Computational Linguistics, EMNLP, Brussels, DOI: https://www.aclweb.org/anthology/D18-1471.pdf,
 	 * Accessed: 05/12/2020.
 	 * @return citation string

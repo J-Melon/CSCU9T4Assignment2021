@@ -67,7 +67,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	//Buttons
 	private JButton addR = new JButton("Add");
 	
-	private JTextArea outputArea = new JTextArea(5, 70);
+	public JTextArea outputArea = new JTextArea(5, 70);
 	
 	private RefCollection bibliography = new RefCollection();
 	
@@ -251,7 +251,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		if (! bibliography.isValidYear(pubYear)) { return "Please enter a valid year."; }
 		
 		//-----Author-----//
-		String[] authors = bibliography.parseAuthors(JAuthors.getText());
+		String authorsStr = JAuthors.getText();
+		if (authorsStr.isBlank()) { return "Please enter the author(s)."; }
+		
+		String[] authors = bibliography.parseAuthors(authorsStr);
 		if (authors == null) { return "Please enter 10 or less authors separated by commas (,)."; }
 		
 		//-----Date Added-----/
@@ -284,35 +287,46 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		
 		//-----RefJournal-----//
 		String journal = JJournal.getText();
-		
-		if (journal.isBlank()) { return "Please enter a journal."; }
-		
+		if (refType.equals("Journal")) { if (journal.isBlank()) { return "Please enter a journal."; } }
+			
 		int volume = 0;
 		int issue = 0;
 		
-		try
+		if (refType.equals("Journal"))
 		{
-			volume = Integer.parseInt(JVolume.getText());
-			issue = Integer.parseInt(JIssue.getText());
-		}
-		catch (NumberFormatException e)
-		{
-			return "Please enter a valid volume and issue or change reference types.";
+			try
+			{
+				volume = Integer.parseInt(JVolume.getText());
+				issue = Integer.parseInt(JIssue.getText());
+			}
+			catch (NumberFormatException e)
+			{
+				return "Please enter a valid volume and issue or change reference types.";
+			}
 		}
 		
+		
 		//----- RefConference -----//
+		
+		
 		String venue = JVenue.getText();
 		String location = JLocation.getText();
 		
-		if (venue.isBlank()) { return "Please enter a venue."; }
-		if (location.isBlank()) { return "Please enter a location.";}
+		if (refType.equals("Conference"))
+		{
+			if (venue.isBlank() && JVenue.isEnabled()) { return "Please enter a venue."; }
+			if (location.isBlank()) { return "Please enter a location.";}
+		}
 		
 		//----- RefBookChap -----//
 		String book = JBook.getText();
 		String editor = JEditor.getText();
 		
-		if (book.isBlank()) { return "Please enter a book title."; }
-		if (editor.isBlank()) { return "Please enter an editor.";}
+		if (refType.equals("Book Chapter"))
+		{
+			if (book.isBlank()) { return "Please enter a book title."; }
+			if (editor.isBlank()) { return "Please enter an editor.";}
+		}
 		
 		//ADD TO COLLECTION
 		Ref r;
@@ -401,7 +415,6 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		
 		JVenue.setText(venue);
 		JLocation.setText(location);
-		addR.doClick();
 	}
 	
 	/** Enters text into GUI (Book Chapter) */
@@ -420,6 +433,5 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		
 		JBook.setText(book);
 		JEditor.setText(editor);
-		addR.doClick();
 	}
 }
