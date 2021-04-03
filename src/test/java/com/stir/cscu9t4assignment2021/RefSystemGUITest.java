@@ -242,7 +242,11 @@ public class RefSystemGUITest
 				"Journal of Experimental Biology", "212", "2");
 		instance.addCitation();
 		
-		instance.blankDisplay();
+		instance.enterJournal("Effects of cocaine on honey bee dance behaviour", "AAdrew Barron, Maleszka Barron",
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009",
+				"25", "3", "2021",
+				"Journal of Unethical Biology", "212", "2");
+		instance.addCitation();
 		
 		instance.enterJournal(null, null, null, null, null, null,
 				null, null, "Journal of Experimental Biology", null, null);
@@ -259,6 +263,96 @@ public class RefSystemGUITest
 				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
 				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n";
 		String result = instance.lookupByJournal();
+		assertEquals(expResult, result);
+	}
+	
+	@Test public void testLookupByVenue()
+	{
+		RefSystemGUI instance = new RefSystemGUI();
+		instance.enterConference("Why?", "Eric HolgatZ, Isabel Cachola", "https://www.aclweb.org/anthology/D18-1471.pdf",
+				"Association for Computational Linguistics", "2018",
+				"25","3","2021", "EMNLP","Brussels");
+				
+		instance.addCitation();
+		
+		instance.enterConference("Why swear? analyzing and inferring the intentions of vulgar expressions", "Eric Holgate, Isabel Cachola", "https://www.aclweb.org/anthology/D18-1471.pdf",
+				"Association for Computational Linguistics", "2018",
+				"25","3","2021", "EMNLP","Brussels");
+		instance.addCitation();
+		
+		instance.enterConference("Why swear? Yes!", "EAic Holgate, Isabel Cachola", "https://www.aclweb.org/anthology/D18-1471.pdf",
+				"Association for Computational Linguistics", "2018",
+				"25","3","2021", "EMNLP","Brussels");
+		instance.addCitation();
+		
+		instance.enterConference("Why swear? Yes!", "EAic Holgate, Isabel Cachola", "https://www.aclweb.org/anthology/D18-1471.pdf",
+				"Association for Computational Linguistics", "2018",
+				"25","3","2021", "A Black Hole","Brussels");
+		instance.addCitation();
+		
+		instance.enterConference(null, null, null, null, null, null,
+				null, null, "EMNLP", null);
+		
+		String expResult = "EAic Holgate, Isabel Cachola, 2018, " +
+				"Why swear? Yes!, " +
+				"Association for Computational Linguistics, EMNLP, Brussels, " +
+				"DOI: https://www.aclweb.org/anthology/D18-1471.pdf, Accessed: " + "25/03/2021.\n" +
+				
+				"Eric Holgate, Isabel Cachola, 2018, " +
+				"Why swear? analyzing and inferring the intentions of vulgar expressions, " +
+				"Association for Computational Linguistics, EMNLP, Brussels, " +
+				"DOI: https://www.aclweb.org/anthology/D18-1471.pdf, Accessed: " + "25/03/2021.\n" +
+				
+				"Eric HolgatZ, Isabel Cachola, 2018, " +
+				"Why?, " +
+				"Association for Computational Linguistics, EMNLP, Brussels, " +
+				"DOI: https://www.aclweb.org/anthology/D18-1471.pdf, Accessed: " + "25/03/2021.\n";
+		String result = instance.lookupByVenue();
+		assertEquals(expResult, result);
+	}
+	
+	@Test public void testLookupByPublisher()
+	{
+		RefSystemGUI instance = new RefSystemGUI();
+		instance.enterJournal("Effects of cocaine", "Andrew BarroZ, Maleszka Barron",
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009",
+				"25", "3", "2021", "Journal of Experimental Biology",
+				"212", "2");
+		instance.addCitation();
+		
+		instance.enterJournal("Effects of bee dance behaviour", "Andrew Barron, Maleszka Barron",
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009",
+				"25", "3", "2021",
+				"Journal of Experimental Biology", "212", "2");
+		instance.addCitation();
+		
+		instance.enterJournal("Effects of cocaine on honey bee dance behaviour", "AAdrew Barron, Maleszka Barron",
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009",
+				"25", "3", "2021",
+				"Journal of Experimental Biology", "212", "2");
+		instance.addCitation();
+		
+		instance.enterJournal("Effects of cocaine on honey bee dance behaviour", "AAdrew Barron, Maleszka Barron",
+				"10.1242/jeb.025361", "The Company of Angry Biologists Ltd", "2009",
+				"25", "3", "2021",
+				"Journal of Experimental Biology", "212", "2");
+		instance.addCitation();
+		
+		instance.enterJournal(null, null, null, "The Company of Biologists Ltd",
+				null, null, null, null, null, null, null);
+		
+		String expResult = "AAdrew Barron, Maleszka Barron, 2009, Effects of cocaine on honey bee dance behaviour, " +
+				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
+				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n" +
+				
+				"Andrew Barron, Maleszka Barron, 2009, Effects of bee dance behaviour, " +
+				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
+				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n" +
+				
+				"Andrew BarroZ, Maleszka Barron, 2009, Effects of cocaine, " +
+				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
+				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n";
+		String result = instance.lookupByPublisher();
 		assertEquals(expResult, result);
 	}
 }
