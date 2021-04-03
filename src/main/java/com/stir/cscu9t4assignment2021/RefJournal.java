@@ -30,6 +30,7 @@ public class RefJournal extends Ref
 	}
 	
 	/** @return journal that the article is in */
+	@Override
 	public String getJournal()
 	{
 		return journal;
@@ -59,6 +60,6 @@ public class RefJournal extends Ref
 	{
 		return getAuthors() + getPubYear() + ", " + getTitle() + ", " + getJournal() + ", " + getPublisher() +
 				", vol. " + getVolume() + ", no. " + getIssue() + ", DOI: " + getDoi() + ", Accessed: " +
-				getDateAdded() + ".";
+				getDateAdded() + ".\n";
 	}
 }

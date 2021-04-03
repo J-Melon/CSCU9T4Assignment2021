@@ -66,6 +66,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	
 	//Buttons
 	private JButton addR = new JButton("Add");
+	private JButton lookupR = new JButton("Lookup");
 	
 	public JTextArea outputArea = new JTextArea(5, 70);
 	
@@ -167,6 +168,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		add(addR);
 		addR.addActionListener(this);
 		
+		add(lookupR);
+		lookupR.addActionListener(this);
+		lookupR.setEnabled(false);
+		
 		add(outputArea);
 		outputArea.setEditable(false);
 		setSize(720, 300);
@@ -187,6 +192,28 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		{
 			JComboBox<String> combo = (JComboBox<String>) event.getSource();
 			refType = (String) combo.getSelectedItem();
+		}
+		
+		if (event.getSource() == lookupR)
+		{
+			switch (refType)
+			{
+				case "Journal":
+					if (!JJournal.getText().isBlank()) { message = lookupByJournal(); }
+					else { message = lookupByPublisher(); }
+					break;
+				case "Conference":
+					if (!JVenue.getText().isBlank()) { message = lookupByVenue(); }
+					else { message = lookupByPublisher(); }
+					break;
+				default:
+					message = lookupByPublisher();
+			}
+		}
+		
+		if (bibliography.getNumberOfRefs() >= 1)
+		{
+			lookupR.setEnabled(true);
 		}
 		
 		//setEditable
@@ -269,16 +296,18 @@ public class RefSystemGUI extends JFrame implements ActionListener
 			month = Calendar.getInstance().get(Calendar.MONTH);
 			year = Calendar.getInstance().get(Calendar.YEAR);
 		}
-		
-		try
+		else
 		{
-			day = Integer.parseInt(JDayAdded.getText());
-			month = Integer.parseInt(JMonthAdded.getText());
-			year = Integer.parseInt(JYearAdded.getText());
-		}
-		catch (NumberFormatException e)
-		{
-			return "Please enter a valid day, month, and year.";
+			try
+			{
+				day = Integer.parseInt(JDayAdded.getText());
+				month = Integer.parseInt(JMonthAdded.getText());
+				year = Integer.parseInt(JYearAdded.getText());
+			}
+			catch (NumberFormatException e)
+			{
+				return "Please enter a valid day, month, and year.";
+			}
 		}
 		
 		Calendar dateAdded = bibliography.isValidDate(day, month, year);
@@ -305,10 +334,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 			}
 		}
 		
-		
 		//----- RefConference -----//
-		
-		
 		String venue = JVenue.getText();
 		String location = JLocation.getText();
 		
@@ -351,6 +377,33 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		bibliography.addCitation(r);
 		System.out.println(r.getCitation());
 		return "Citation added.";
+	}
+	
+	public String lookupByJournal()
+	{
+		String journal = JJournal.getText();
+		if (refType.equals("Journal")) { if (journal.isBlank()) { return "Please enter a journal."; } }
+		
+		outputArea.setText("looking up record ...");
+		return bibliography.lookupByJournal(journal);
+	}
+	
+	public String lookupByVenue()
+	{
+		String venue = JVenue.getText();
+		if (refType.equals("Conference")) { if (venue.isBlank()) { return "Please enter a venue."; } }
+		
+		outputArea.setText("looking up record ...");
+		return bibliography.lookupByVenue(venue);
+	}
+	
+	public String lookupByPublisher()
+	{
+		String publisher = JPublisher.getText();
+		if (publisher.isBlank()) { return "Please enter a publisher."; }
+		
+		outputArea.setText("looking up record ...");
+		return bibliography.lookupByPublisher(publisher);
 	}
 	
 	/** Blanks all fields in GUI */

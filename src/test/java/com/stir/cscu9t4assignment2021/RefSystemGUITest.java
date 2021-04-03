@@ -6,6 +6,7 @@
 package com.stir.cscu9t4assignment2021;
 
 import java.awt.event.ActionEvent;
+import java.util.Calendar;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -156,10 +157,10 @@ public class RefSystemGUITest
 		assertEquals("Please enter a valid day, month, and year.", result);
 		
 		instance.enterJournal("Effects of cocaine on honey bee dance behaviour", "Andrew Barron, Maleszka Barron",
-				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009", "25",
-				"3", null, "Journal of Experimental Biology", "212", "2");
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009", null,
+				null, null, "Journal of Experimental Biology", "212", "2");
 		result = instance.addCitation();
-		assertEquals("Please enter a valid day, month, and year.", result);
+		assertEquals("Citation added.", result);
 	}
 	
 	@Test public void testAddCitationVolumeIssue()
@@ -218,6 +219,47 @@ public class RefSystemGUITest
 				"25", "3", "2021", "Becoming salmon", null);
 		String result = instance.addCitation();
 		assertEquals("Please enter an editor.", result);
+	}
+	
+	@Test public void testLookupByJournal()
+	{
+		RefSystemGUI instance = new RefSystemGUI();
+		instance.enterJournal("Effects of cocaine", "Andrew BarroZ, Maleszka Barron",
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009",
+				"25", "3", "2021", "Journal of Experimental Biology",
+				"212", "2");
+		instance.addCitation();
+		
+		instance.enterJournal("Effects of bee dance behaviour", "Andrew Barron, Maleszka Barron",
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009",
+				"25", "3", "2021",
+				"Journal of Experimental Biology", "212", "2");
+		instance.addCitation();
+		
+		instance.enterJournal("Effects of cocaine on honey bee dance behaviour", "AAdrew Barron, Maleszka Barron",
+				"10.1242/jeb.025361", "The Company of Biologists Ltd", "2009",
+				"25", "3", "2021",
+				"Journal of Experimental Biology", "212", "2");
+		instance.addCitation();
+		
+		instance.blankDisplay();
+		
+		instance.enterJournal(null, null, null, null, null, null,
+				null, null, "Journal of Experimental Biology", null, null);
+		
+		String expResult = "AAdrew Barron, Maleszka Barron, 2009, Effects of cocaine on honey bee dance behaviour, " +
+				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
+				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n" +
+				
+				"Andrew Barron, Maleszka Barron, 2009, Effects of bee dance behaviour, " +
+				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
+				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n" +
+				
+				"Andrew BarroZ, Maleszka Barron, 2009, Effects of cocaine, " +
+				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
+				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n";
+		String result = instance.lookupByJournal();
+		assertEquals(expResult, result);
 	}
 }
 

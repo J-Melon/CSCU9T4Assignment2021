@@ -1,19 +1,17 @@
 package com.stir.cscu9t4assignment2021;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 public class RefCollection
 {
 	private final int MAX_AUTHORS = 10; //Maximum number of authors
+	private final int MAX_RESULTS = 20; //Maximum number of results by lookup
 	private List<Ref> refList;
 	
 	/** Constructor */
 	public RefCollection()
 	{
-		refList = new ArrayList<Ref>();
+		refList = new ArrayList<>();
 	}
 	
 	/**
@@ -23,6 +21,118 @@ public class RefCollection
 	public void addCitation(Ref reference)
 	{
 		refList.add(reference);
+	}
+	
+	public String lookupByJournal(String journal)
+	{
+		ListIterator<Ref> iter = refList.listIterator();
+		ArrayList<Ref> results = new ArrayList<>();
+		
+		
+		while (iter.hasNext())
+		{
+			Ref current = iter.next();
+			if (current.getJournal().equals(journal))
+			{
+				results.add(current);
+			}
+		}
+		
+		sort(results);
+		iter = results.listIterator();
+		StringBuilder resultStr = new StringBuilder();
+		
+		while (iter.hasNext())
+		{
+			Ref current = iter.next();
+			if (current.getJournal().equals(journal))
+			{
+				resultStr.append(current.getCitation());
+			}
+		}
+		
+		return resultStr.toString();
+	}
+	
+	public String lookupByVenue(String venue)
+	{
+		ListIterator<Ref> iter = refList.listIterator();
+		ArrayList<Ref> results = new ArrayList<>();
+		
+		
+		while (iter.hasNext())
+		{
+			Ref current = iter.next();
+			if (current.getVenue().equals(venue))
+			{
+				results.add(current);
+			}
+		}
+		
+		sort(results);
+		iter = results.listIterator();
+		StringBuilder resultStr = new StringBuilder();
+		
+		while (iter.hasNext())
+		{
+			Ref current = iter.next();
+			if (current.getVenue().equals(venue))
+			{
+				resultStr.append(current.getCitation());
+			}
+		}
+		
+		return resultStr.toString();
+	}
+	
+	public String lookupByPublisher(String publisher)
+	{
+		ListIterator<Ref> iter = refList.listIterator();
+		ArrayList<Ref> results = new ArrayList<>();
+		
+		
+		while (iter.hasNext())
+		{
+			Ref current = iter.next();
+			if (current.getPublisher().equals(publisher))
+			{
+				results.add(current);
+			}
+		}
+		
+		sort(results);
+		iter = results.listIterator();
+		StringBuilder resultStr = new StringBuilder();
+		
+		while (iter.hasNext())
+		{
+			Ref current = iter.next();
+			if (current.getPublisher().equals(publisher))
+			{
+				resultStr.append(current.getCitation());
+			}
+		}
+		
+		return resultStr.toString();
+	}
+	
+	public static void sort(ArrayList<Ref> arrList)
+	{
+		Ref temp;
+		
+		//Sort results arraylist for author alphabetically
+		for (int i = 0; i < arrList.size() - 1; i++)
+		{
+			for (int j = i + 1; j < arrList.size(); j++)
+			{
+				if (arrList.get(i).getFirstAuthor().compareToIgnoreCase(arrList.get(j).getFirstAuthor()) > 0)
+				{
+					temp = arrList.get(i);
+					arrList.set(i, arrList.get(j));
+					arrList.set(j, temp);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -41,9 +151,9 @@ public class RefCollection
 		boolean lastComma = false; //Accounts for space after comma
 		
 		//Splits author string and puts into array
-		for (int i = 0; i < authorCh.length - 1; i++)
+		for (char ch : authorCh)
 		{
-			if (authorCh[i] == ',')
+			if (ch == ',')
 			{
 				count++;
 				lastComma = true;
@@ -58,13 +168,13 @@ public class RefCollection
 					return null; //Failed
 				}
 			}
-			else if (lastComma && authorCh[i] == ' ') //Discards comma space
+			else if (lastComma && ch == ' ') //Discards comma space
 			{
 				lastComma = false;
 			}
 			else
 			{
-				currentAuthor.append(authorCh[i]);
+				currentAuthor.append(ch);
 			}
 		}
 		
@@ -97,8 +207,8 @@ public class RefCollection
 		
 		try
 		{
-			calendar.set(year, month, day);
-			calendar.getTime(); //To throw exception as check done lazily
+			calendar.set(year, month - 1, day); //As January = 0
+			//calendar.getTime(); //To throw exception as check done lazily
 		}
 		catch (Exception e)
 		{
@@ -112,8 +222,22 @@ public class RefCollection
 	 * Counts the number of entries
 	 * @return number of entries
 	 */
-	public int getNumberOfEntries()
+	public int getNumberOfRefs()
 	{
 		return refList.size();
+	}
+	
+	public String[] removeNull(String[] a)
+	{
+		ArrayList<String> removedNull = new ArrayList<>();
+		for (String str : a)
+		{
+			if (str != null)
+			{
+				removedNull.add(str);
+			}
+		}
+		
+		return removedNull.toArray(new String[0]);
 	}
 }

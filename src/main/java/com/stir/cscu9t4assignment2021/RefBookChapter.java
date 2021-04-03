@@ -47,6 +47,6 @@ public class RefBookChapter extends Ref
 	public String getCitation()
 	{
 		return getAuthors() + getPubYear() + ", '" + getTitle() + "', in " + getEditor() + " (ed) " + getBook() + ", " +
-				getPublisher() + ", DOI: " + getDoi() + ", Accessed: " + getDateAdded() + ".";
+				getPublisher() + ", DOI: " + getDoi() + ", Accessed: " + getDateAdded() + ".\n";
 	}
 }

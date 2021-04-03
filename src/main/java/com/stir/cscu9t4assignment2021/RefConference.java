@@ -27,6 +27,7 @@ public class RefConference extends Ref
 	}
 	
 	/** @return venue conference took place at */
+	@Override
 	public String getVenue()
 	{
 		return venue;
@@ -50,6 +51,6 @@ public class RefConference extends Ref
 	public String getCitation()
 	{
 		return getAuthors() + getPubYear() + ", " + getTitle() + ", " + getPublisher() + ", " + getVenue() + ", " +
-				getLocation() + ", DOI: " + getDoi() + ", Accessed: " + getDateAdded() + ".";
+				getLocation() + ", DOI: " + getDoi() + ", Accessed: " + getDateAdded() + ".\n";
 	}
 }

@@ -90,7 +90,7 @@ public class RefConferenceTest
 		String expResult = "Eric Holgate, Isabel Cachola, 2018, " +
 				"Why swear? analyzing and inferring the intentions of vulgar expressions, " +
 				"Association for Computational Linguistics, EMNLP, Brussels, " +
-				"DOI: https://www.aclweb.org/anthology/D18-1471.pdf, Accessed: " + "25/03/2021.";
+				"DOI: https://www.aclweb.org/anthology/D18-1471.pdf, Accessed: " + "25/03/2021.\n";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
 	}

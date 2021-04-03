@@ -72,7 +72,7 @@ public class RefJournalTest
 				"Journal of Experimental Biology", 212, 2);
 		String expResult = "Andrew Barron, Maleszka Barron, 2009, Effects of cocaine on honey bee dance behaviour, " +
 				"Journal of Experimental Biology, The Company of Biologists Ltd, vol. 212, no. 2, " +
-				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.";
+				"DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
 	}

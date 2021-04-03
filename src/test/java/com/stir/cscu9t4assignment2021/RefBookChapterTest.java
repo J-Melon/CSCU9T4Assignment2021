@@ -89,7 +89,7 @@ public class RefBookChapterTest
 				2015, dateAdded, "Becoming salmon", "Darra Goldstein");
 		String expResult = "Marianne Lien, 2015, 'Becoming Sentient: Choreographies of Caring and Killing', " +
 				"in Darra Goldstein (ed) Becoming " + "salmon, University of California Press, " +
-				"DOI: https://doi.org/10.1525/9780520961838, Accessed: 25/03/2021.";
+				"DOI: https://doi.org/10.1525/9780520961838, Accessed: 25/03/2021.\n";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
 	}

@@ -148,7 +148,7 @@ public class RefTest
 		Ref instance = new Ref("Effects of cocaine on honey bee dance behaviour", authors, "10.1242/jeb.025361",
 				"The Company of Biologists Ltd", 2009, dateAdded);
 		String expResult = "Andrew Barron, Maleszka Barron, 2009, Effects of cocaine on honey bee dance behaviour, " +
-				"The Company of Biologists Ltd, DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.";
+				"The Company of Biologists Ltd, DOI: 10.1242/jeb.025361, Accessed: 25/03/2021.\n";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
 	}

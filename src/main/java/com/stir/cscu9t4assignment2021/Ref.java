@@ -39,17 +39,23 @@ public class Ref
 		return title;
 	}
 	
-	/** @return list of authors */
+	/** @return list of authors in string */
 	public String getAuthors()
 	{
 		StringBuilder sb = new StringBuilder();
 		
 		for (String author : authors)
 		{
-			sb.append(author).append(", ");
+			if (author != null) { sb.append(author).append(", "); }
 		}
 		
 		return sb.toString();
+	}
+	
+	/** @return first author */
+	public String getFirstAuthor()
+	{
+		return authors[0];
 	}
 	
 	/** @return name of publisher */
@@ -88,6 +94,16 @@ public class Ref
 	public String getCitation()
 	{
 		return getAuthors() + getPubYear() + ", " + getTitle() + ", " + getPublisher() + ", DOI: " + getDoi()
-				+ ", Accessed: " + getDateAdded() + ".";
+				+ ", Accessed: " + getDateAdded() + ".\n";
+	}
+	
+	public String getJournal()
+	{
+		return null;
+	}
+	
+	public String getVenue()
+	{
+		return null;
 	}
 }
