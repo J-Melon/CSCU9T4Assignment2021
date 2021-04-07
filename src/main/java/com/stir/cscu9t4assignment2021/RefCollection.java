@@ -1,11 +1,14 @@
 package com.stir.cscu9t4assignment2021;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class RefCollection
 {
 	private final int MAX_AUTHORS = 10; //Maximum number of authors
-	private final int MAX_RESULTS = 20; //Maximum number of results by lookup
 	private List<Ref> refList;
 	
 	/** Constructor */
@@ -18,16 +21,12 @@ public class RefCollection
 	 * Adds citation (reference) to reference list
 	 * @param reference citation to be added
 	 */
-	public void addCitation(Ref reference)
-	{
-		refList.add(reference);
-	}
+	public void addCitation(Ref reference) { refList.add(reference); }
 	
 	public String lookupByJournal(String journal)
 	{
 		ListIterator<Ref> iter = refList.listIterator();
 		ArrayList<Ref> results = new ArrayList<>();
-		
 		
 		while (iter.hasNext())
 		{
@@ -183,6 +182,140 @@ public class RefCollection
 		return authors; //Passed
 	}
 	
+	public String importCSV(String path, String refType)
+	{
+		File file = new File(path);
+		Ref reference;
+		
+		try
+		{
+			Scanner scan = new Scanner(file);
+			scan.useDelimiter(",|\\r\\n|\\n|\\r"); //Linux/OSX(Old)/Windows
+			scan.nextLine(); //Headings
+			
+			while (scan.hasNext())
+			{
+				//Basic Reference
+				String scanTitle = scan.next();
+				if (scanTitle.isBlank()) { return "Found blank line in CSV, please remove."; }
+				
+				String scanAuthors = scan.next();
+				String scanYear = scan.next();
+				String scanPublisher = scan.next();
+				String scanDOI = scan.next();
+				String scanDate = scan.next();
+				
+				//Declarations
+				String scanJournal = "";
+				String scanVolume = "";
+				String scanIssue = "";
+				String scanVenue = "";
+				String scanLocation = "";
+				String scanBook = "";
+				String scanEditor = "";
+				
+				if (refType.equals("Journal") || refType.equals("all"))
+				{
+					//Journal
+					scanJournal = scan.next();
+					scanVolume = scan.next();
+					scanIssue = scan.next();
+				}
+				
+				if (refType.equals("Conference") || refType.equals("all"))
+				{
+					//Conference
+					scanVenue = scan.next();
+					scanLocation = scan.next();
+				}
+				
+				if (refType.equals("Book Chapter") || refType.equals("all"))
+				{
+					//Book Chapter
+					scanBook = scan.next();
+					scanEditor = scan.next();
+				}
+				
+				//INTEGER PARSING
+				int pubYear;
+				int volume;
+				int issue;
+				
+				//Year
+				try { pubYear = Integer.parseInt(scanYear); }
+				catch (NumberFormatException e)
+				{
+					scanYear = "0";
+					pubYear = Integer.parseInt(scanYear);
+				}
+				
+				//Volume
+				try { volume = Integer.parseInt(scanVolume); }
+				catch (NumberFormatException e)
+				{
+					scanVolume = "0";
+					volume = Integer.parseInt(scanVolume);
+				}
+				
+				//Issue
+				try { issue = Integer.parseInt(scanIssue); }
+				catch (NumberFormatException e)
+				{
+					scanIssue = "0";
+					issue = Integer.parseInt(scanIssue);
+				}
+				
+				//OTHER PARSING
+				//Authors
+				String[] authors = parseAuthors(scanAuthors);
+				
+				//Date
+				Calendar calendar = Calendar.getInstance();
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				
+				if (! scanDate.isBlank())
+				{
+					calendar.setTime(sdf.parse(scanDate));
+					
+					if (isValidDate(calendar) == null)
+					{
+						calendar = Calendar.getInstance();
+					}
+				}
+				
+				if (! scanJournal.isBlank() && ! scanVolume.isBlank() && ! scanIssue.isBlank())
+				{
+					reference = new RefJournal(scanTitle, authors, scanDOI, scanPublisher, pubYear, calendar,
+							scanJournal, volume, issue);
+				}
+				else if (! scanVenue.isBlank() && ! scanLocation.isBlank())
+				{
+					reference = new RefConference(scanTitle, authors, scanDOI, scanPublisher, pubYear, calendar,
+							scanVenue, scanLocation);
+				}
+				else
+				{
+					reference = new RefBookChapter(scanTitle, authors, scanDOI, scanPublisher, pubYear, calendar,
+							scanBook, scanEditor);
+				}
+				
+				System.out.println(reference.getCitation());
+				addCitation(reference);
+			}
+			
+		}
+		catch (IOException e)
+		{
+			return "CSV import failed. Make sure to enter a correct path.";
+		}
+		catch (ParseException e)
+		{
+			return "CSV import failed. Make sure to enter valid dates and select the appropriate type.";
+		}
+		
+		return "CSV imported successfully";
+	}
+	
 	/**
 	 * Checks if year is not negative and less than current year
 	 * @param year a year
@@ -207,8 +340,29 @@ public class RefCollection
 		
 		try
 		{
-			calendar.set(year, month - 1, day); //As January = 0
-			//calendar.getTime(); //To throw exception as check done lazily
+			calendar.set(year, month, day); //As January = 0
+			calendar.getTime(); //To throw exception as check done lazily
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+		
+		return calendar;
+	}
+	
+	/**
+	 * Checks if given date is valid
+	 * @param calendar
+	 * @return validated calendar
+	 */
+	public Calendar isValidDate(Calendar calendar)
+	{
+		calendar.setLenient(false);
+		
+		try
+		{
+			calendar.getTime(); //To throw exception as check done lazily
 		}
 		catch (Exception e)
 		{

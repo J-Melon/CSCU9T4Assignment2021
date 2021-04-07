@@ -34,7 +34,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	
 	//Book Chapter Fields
 	private JTextField JBook = new JTextField(15);
-	private JTextField JEditor = new JTextField(15);
+	private JTextField JEditor = new JTextField(50);
+	
+	//CSV
+	private JTextField JCSVPath = new JTextField(30);
 	
 	//OG Labels
 	private JLabel labTitle = new JLabel(" Title:");
@@ -59,16 +62,23 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JLabel labBook = new JLabel(" Book:");
 	private JLabel labEditor = new JLabel(" Editor:");
 	
+	//CSV Label
+	private JLabel labCSVPath = new JLabel(" CSV Path:");
+	
 	//Publication type dropdown list
 	String[] pubTypes = new String[] {"Journal", "Conference", "Book Chapter"};
 	JComboBox<String> JRefList = new JComboBox<>(pubTypes);
 	private String refType = "";
 	
+	//Checkbox
+	private JCheckBox JAllData = new JCheckBox("All reference types?");
+	
 	//Buttons
 	private JButton addR = new JButton("Add");
 	private JButton lookupR = new JButton("Lookup");
+	private JButton importCSV = new JButton("Import CSV");
 	
-	public JTextArea outputArea = new JTextArea(5, 70);
+	public JTextArea outputArea = new JTextArea(26, 70);
 	
 	private RefCollection bibliography = new RefCollection();
 	
@@ -164,6 +174,15 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		add(JEditor);
 		JEditor.setEditable(false);
 		
+		//CSV
+		add(labCSVPath);
+		add(JCSVPath);
+		JCSVPath.setEditable(true);
+		
+		//CHECK BOX
+		add(JAllData);
+		JAllData.addActionListener(this);
+		
 		//BUTTONS
 		add(addR);
 		addR.addActionListener(this);
@@ -172,9 +191,12 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		lookupR.addActionListener(this);
 		lookupR.setEnabled(false);
 		
+		add(importCSV);
+		importCSV.addActionListener(this);
+		
 		add(outputArea);
 		outputArea.setEditable(false);
-		setSize(720, 300);
+		setSize(720, 720);
 		setVisible(true);
 		blankDisplay();
 	}
@@ -182,16 +204,54 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent event)
 	{
 		String message = "";
+		if ((event.getSource() == JAllData)) { return; }
 		
-		if (event.getSource() == addR)
-		{
-			message = addCitation();
-		}
+		if (event.getSource() == addR) { message = addCitation(); }
 		
 		if (event.getSource() == JRefList)
 		{
 			JComboBox<String> combo = (JComboBox<String>) event.getSource();
 			refType = (String) combo.getSelectedItem();
+			
+			switch (refType)
+			{
+				case "Journal":
+					JJournal.setEditable(true);
+					JVolume.setEditable(true);
+					JIssue.setEditable(true);
+					//Conference blank
+					JVenue.setEditable(false);
+					JLocation.setEditable(false);
+					//BookChap blank
+					JBook.setEditable(false);
+					JEditor.setEditable(false);
+					break;
+				case "Conference":
+					JVenue.setEditable(true);
+					JLocation.setEditable(true);
+					//Journal blank
+					JJournal.setEditable(false);
+					JVolume.setEditable(false);
+					JIssue.setEditable(false);
+					//BookChap blank
+					JBook.setEditable(false);
+					JEditor.setEditable(false);
+					break;
+				case "Book Chapter":
+					JBook.setEditable(true);
+					JEditor.setEditable(true);
+					//Journal blank
+					JJournal.setEditable(false);
+					JVolume.setEditable(false);
+					JIssue.setEditable(false);
+					//Conference blank
+					JVenue.setEditable(false);
+					JLocation.setEditable(false);
+				default:
+					break;
+			}
+			
+			return;
 		}
 		
 		if (event.getSource() == lookupR)
@@ -206,53 +266,19 @@ public class RefSystemGUI extends JFrame implements ActionListener
 					if (!JVenue.getText().isBlank()) { message = lookupByVenue(); }
 					else { message = lookupByPublisher(); }
 					break;
-				default:
+				default: //Used by any type
 					message = lookupByPublisher();
 			}
+		}
+		
+		if (event.getSource() == importCSV)
+		{
+			message = importCSV();
 		}
 		
 		if (bibliography.getNumberOfRefs() >= 1)
 		{
 			lookupR.setEnabled(true);
-		}
-		
-		//setEditable
-		switch (refType)
-		{
-			case "Journal":
-				JJournal.setEditable(true);
-				JVolume.setEditable(true);
-				JIssue.setEditable(true);
-				//Conference blank
-				JVenue.setEditable(false);
-				JLocation.setEditable(false);
-				//BookChap blank
-				JBook.setEditable(false);
-				JEditor.setEditable(false);
-				break;
-			case "Conference":
-				JVenue.setEditable(true);
-				JLocation.setEditable(true);
-				//Journal blank
-				JJournal.setEditable(false);
-				JVolume.setEditable(false);
-				JIssue.setEditable(false);
-				//BookChap blank
-				JBook.setEditable(false);
-				JEditor.setEditable(false);
-				break;
-			case "Book Chapter":
-				JBook.setEditable(true);
-				JEditor.setEditable(true);
-				//Journal blank
-				JJournal.setEditable(false);
-				JVolume.setEditable(false);
-				JIssue.setEditable(false);
-				//Conference blank
-				JVenue.setEditable(false);
-				JLocation.setEditable(false);
-			default:
-				break;
 		}
 		
 		outputArea.setText(message);
@@ -310,7 +336,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 			}
 		}
 		
-		Calendar dateAdded = bibliography.isValidDate(day, month, year);
+		Calendar dateAdded = bibliography.isValidDate(day, month - 1, year); //As Jan = 0
 		
 		if (dateAdded == null) { return "Please enter a valid date."; }
 		
@@ -374,9 +400,25 @@ public class RefSystemGUI extends JFrame implements ActionListener
 				break;
 		}
 		
-		bibliography.addCitation(r);
 		System.out.println(r.getCitation());
+		
+		bibliography.addCitation(r);
 		return "Citation added.";
+	}
+	
+	public String importCSV()
+	{
+		String path = JCSVPath.getText();
+		if (path.isBlank()) { return "Please enter a path to import CSV file from."; }
+		
+		outputArea.setText("looking up record by journal ...");
+		
+		if (JAllData.isSelected())
+		{
+			return bibliography.importCSV(path, "all");
+		}
+		
+		return bibliography.importCSV(path, refType);
 	}
 	
 	public String lookupByJournal()
@@ -384,8 +426,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		String journal = JJournal.getText();
 		if (refType.equals("Journal")) { if (journal.isBlank()) { return "Please enter a journal."; } }
 		
-		outputArea.setText("looking up record ...");
-		return bibliography.lookupByJournal(journal);
+		outputArea.setText("looking up record by journal ...");
+		String result = bibliography.lookupByJournal(journal);
+		if (result.isBlank()) { return "No references found."; }
+		return result;
 	}
 	
 	public String lookupByVenue()
@@ -393,8 +437,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		String venue = JVenue.getText();
 		if (refType.equals("Conference")) { if (venue.isBlank()) { return "Please enter a venue."; } }
 		
-		outputArea.setText("looking up record ...");
-		return bibliography.lookupByVenue(venue);
+		outputArea.setText("looking up record by venue ...");
+		String result = bibliography.lookupByVenue(venue);
+		if (result.isBlank()) { return "No references found."; }
+		return result;
 	}
 	
 	public String lookupByPublisher()
@@ -402,8 +448,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		String publisher = JPublisher.getText();
 		if (publisher.isBlank()) { return "Please enter a publisher."; }
 		
-		outputArea.setText("looking up record ...");
-		return bibliography.lookupByPublisher(publisher);
+		outputArea.setText("looking up record by publisher ...");
+		String result = bibliography.lookupByPublisher(publisher);
+		if (result.isBlank()) { return "No references found."; }
+		return result;
 	}
 	
 	/** Blanks all fields in GUI */
@@ -430,9 +478,12 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		//RefBookChap
 		JBook.setText("");
 		JEditor.setText("");
+		
+		//CSV
+		JCSVPath.setText("");
 	}
 	
-	/** Enters text into GUI (Journal) */
+	/** Enters text into GUI (Journal) for testing */
 	public void enterJournal(String title, String authors, String doi, String publisher, String pubYear, String dayAdded,
 							 String monthAdded, String yearAdded, String journal, String volume, String issue)
 	{
@@ -452,7 +503,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		JIssue.setText(issue);
 	}
 	
-	/** Enters text into GUI (Conference) */
+	/** Enters text into GUI (Conference) for testing */
 	public void enterConference(String title, String authors, String doi, String publisher, String pubYear, String dayAdded,
 							 String monthAdded, String yearAdded, String venue, String location)
 	{
@@ -470,7 +521,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		JLocation.setText(location);
 	}
 	
-	/** Enters text into GUI (Book Chapter) */
+	/** Enters text into GUI (Book Chapter) for testing */
 	public void enterBookChapter(String title, String authors, String doi, String publisher, String pubYear, String dayAdded,
 								String monthAdded, String yearAdded,String book, String editor)
 	{

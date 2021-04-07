@@ -99,11 +99,11 @@ public class Ref
 	
 	public String getJournal()
 	{
-		return null;
+		return "";
 	}
 	
 	public String getVenue()
 	{
-		return null;
+		return "";
 	}
 }
