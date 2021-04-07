@@ -37,7 +37,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JTextField JEditor = new JTextField(50);
 	
 	//CSV
-	private JTextField JCSVPath = new JTextField(30);
+	private JTextField JCSVPath = new JTextField(35);
 	
 	//OG Labels
 	private JLabel labTitle = new JLabel(" Title:");
@@ -72,12 +72,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	
 	//Checkbox
 	private JCheckBox JAllData = new JCheckBox("All reference types?");
+	private JCheckBox JWrite = new JCheckBox("Export search to TXT?");
 	
 	//Buttons
 	private JButton addR = new JButton("Add");
 	private JButton lookupR = new JButton("Lookup");
 	private JButton importCSV = new JButton("Import CSV");
-	private JButton exportTXT = new JButton("Export TXT");
+	private JButton exportTXT = new JButton("Export all to TXT");
 	
 	public JTextArea outputArea = new JTextArea(26, 70);
 	
@@ -180,9 +181,12 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		add(JCSVPath);
 		JCSVPath.setEditable(true);
 		
-		//CHECK BOX
+		//CHECK BOXES
 		add(JAllData);
 		JAllData.addActionListener(this);
+		
+		add(JWrite);
+		JWrite.addActionListener(this);
 		
 		//BUTTONS
 		add(addR);
@@ -210,6 +214,8 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	{
 		String message = "";
 		if ((event.getSource() == JAllData)) { return; }
+		
+		if ((event.getSource() == JWrite)) { return; }
 		
 		if (event.getSource() == addR) { message = addCitation(); }
 		
@@ -432,10 +438,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	public String lookupByJournal()
 	{
 		String journal = JJournal.getText();
+		String result;
+		
 		if (refType.equals("Journal")) { if (journal.isBlank()) { return "Please enter a journal."; } }
+		if (JWrite.isSelected()) {result = bibliography.lookupByJournal(journal, true);}
+		else { result = bibliography.lookupByJournal(journal, false); }
 		
 		outputArea.setText("looking up record by journal ...");
-		String result = bibliography.lookupByJournal(journal);
 		if (result.isBlank()) { return "No references found."; }
 		return result;
 	}
@@ -443,10 +452,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	public String lookupByVenue()
 	{
 		String venue = JVenue.getText();
+		String result;
+		
 		if (refType.equals("Conference")) { if (venue.isBlank()) { return "Please enter a venue."; } }
+		if (JWrite.isSelected()) {result = bibliography.lookupByVenue(venue, true);}
+		else { result = bibliography.lookupByVenue(venue, false); }
 		
 		outputArea.setText("looking up record by venue ...");
-		String result = bibliography.lookupByVenue(venue);
 		if (result.isBlank()) { return "No references found."; }
 		return result;
 	}
@@ -454,10 +466,13 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	public String lookupByPublisher()
 	{
 		String publisher = JPublisher.getText();
+		String result;
+		
 		if (publisher.isBlank()) { return "Please enter a publisher."; }
+		if (JWrite.isSelected()) {result = bibliography.lookupByPublisher(publisher, true);}
+		else { result = bibliography.lookupByPublisher(publisher, false); }
 		
 		outputArea.setText("looking up record by publisher ...");
-		String result = bibliography.lookupByPublisher(publisher);
 		if (result.isBlank()) { return "No references found."; }
 		return result;
 	}

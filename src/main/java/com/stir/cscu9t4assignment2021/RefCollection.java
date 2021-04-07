@@ -29,7 +29,7 @@ public class RefCollection
 	 * @param journal journal to be searched
 	 * @return references concatenated into a string
 	 */
-	public String lookupByJournal(String journal)
+	public String lookupByJournal(String journal, boolean write)
 	{
 		ListIterator<Ref> iter = refList.listIterator();
 		ArrayList<Ref> results = new ArrayList<>();
@@ -44,6 +44,7 @@ public class RefCollection
 		}
 		
 		sort(results);
+		
 		iter = results.listIterator();
 		StringBuilder resultStr = new StringBuilder();
 		
@@ -54,6 +55,13 @@ public class RefCollection
 			{
 				resultStr.append(current.getCitation());
 			}
+		}
+		
+		if (write)
+		{
+			String pathname = new File("").getAbsolutePath() + "\\" +
+					new SimpleDateFormat("mmss-").format(new Date()) + "JournalReferences" + ".txt";
+			return writeFile(pathname, resultStr);
 		}
 		
 		return resultStr.toString();
@@ -64,7 +72,7 @@ public class RefCollection
 	 * @param venue venue to be searched
 	 * @return references concatenated into a string
 	 */
-	public String lookupByVenue(String venue)
+	public String lookupByVenue(String venue, boolean write)
 	{
 		ListIterator<Ref> iter = refList.listIterator();
 		ArrayList<Ref> results = new ArrayList<>();
@@ -89,6 +97,13 @@ public class RefCollection
 			{
 				resultStr.append(current.getCitation());
 			}
+		}
+		
+		if (write)
+		{
+			String pathname = new File("").getAbsolutePath() + "\\" +
+					new SimpleDateFormat("mmss-").format(new Date()) + "ConferenceReferences" + ".txt";
+			return writeFile(pathname, resultStr);
 		}
 		
 		return resultStr.toString();
@@ -99,7 +114,7 @@ public class RefCollection
 	 * @param publisher publisher to be searched
 	 * @return references concatenated into a string
 	 */
-	public String lookupByPublisher(String publisher)
+	public String lookupByPublisher(String publisher, boolean write)
 	{
 		ListIterator<Ref> iter = refList.listIterator();
 		ArrayList<Ref> results = new ArrayList<>();
@@ -127,14 +142,21 @@ public class RefCollection
 			}
 		}
 		
+		if (write)
+		{
+			String pathname = new File("").getAbsolutePath() + "\\" +
+					new SimpleDateFormat("mmss-").format(new Date()) + "PublisherReferences" + ".txt";
+			return writeFile(pathname, resultStr);
+		}
+		
 		return resultStr.toString();
 	}
 	
 	/**
-	 * Sorts an array list of references alphabetically by the first author starting from first name.
+	 * Sorts a list of references alphabetically by the first author starting from first name.
 	 * @param arrList list of references
 	 */
-	public static void sort(ArrayList<Ref> arrList)
+	public static void sort(List<Ref> arrList)
 	{
 		Ref temp;
 		
@@ -346,8 +368,10 @@ public class RefCollection
 	 */
 	public String exportTXT()
 	{
+		sort(refList);
+		
 		ListIterator<Ref> iter = refList.listIterator(); //***************SORT IT FOOL
-		String filename = new File("").getAbsolutePath() + "\\" +
+		String pathname = new File("").getAbsolutePath() + "\\" +
 				new SimpleDateFormat("mmss-").format(new Date()) + "References" + ".txt";
 		StringBuilder references = new StringBuilder();
 		
@@ -357,7 +381,12 @@ public class RefCollection
 			references.append(current);
 		}
 		
-		File outFile = new File(new File(filename).getAbsolutePath());
+		return writeFile(pathname, references);
+	}
+	
+	public String writeFile(String pathname, StringBuilder references)
+	{
+		File outFile = new File(new File(pathname).getAbsolutePath());
 		
 		try
 		{
@@ -373,7 +402,6 @@ public class RefCollection
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
 			return ("Error: IO exception.");
 		}
 	}

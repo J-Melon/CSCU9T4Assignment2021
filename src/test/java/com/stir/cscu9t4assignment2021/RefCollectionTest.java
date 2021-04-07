@@ -98,7 +98,7 @@ public class RefCollectionTest
 		instance.addCitation(ref1);
 		instance.addCitation(ref2);
 		instance.addCitation(ref3);
-		String result = instance.lookupByJournal(journal);
+		String result = instance.lookupByJournal(journal, false);
 		assertEquals(expResult, result);
 	}
 
@@ -144,7 +144,7 @@ public class RefCollectionTest
 		instance.addCitation(ref1);
 		instance.addCitation(ref2);
 		instance.addCitation(ref3);
-		String result = instance.lookupByVenue(venue);
+		String result = instance.lookupByVenue(venue, false);
 		assertEquals(expResult, result);
 	}
 
@@ -187,7 +187,7 @@ public class RefCollectionTest
 		instance.addCitation(ref1);
 		instance.addCitation(ref2);
 		instance.addCitation(ref3);
-		String result = instance.lookupByPublisher(publisher);
+		String result = instance.lookupByPublisher(publisher, false);
 		assertEquals(expResult, result);
 	}
 
