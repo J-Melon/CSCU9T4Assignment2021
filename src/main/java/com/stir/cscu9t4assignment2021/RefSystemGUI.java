@@ -77,6 +77,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 	private JButton addR = new JButton("Add");
 	private JButton lookupR = new JButton("Lookup");
 	private JButton importCSV = new JButton("Import CSV");
+	private JButton exportTXT = new JButton("Export TXT");
 	
 	public JTextArea outputArea = new JTextArea(26, 70);
 	
@@ -194,6 +195,10 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		add(importCSV);
 		importCSV.addActionListener(this);
 		
+		add(exportTXT);
+		exportTXT.addActionListener(this);
+		exportTXT.setEnabled(false);
+		
 		add(outputArea);
 		outputArea.setEditable(false);
 		setSize(720, 720);
@@ -207,6 +212,8 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		if ((event.getSource() == JAllData)) { return; }
 		
 		if (event.getSource() == addR) { message = addCitation(); }
+		
+		if (event.getSource() == exportTXT) { message = bibliography.exportTXT(); }
 		
 		if (event.getSource() == JRefList)
 		{
@@ -279,6 +286,7 @@ public class RefSystemGUI extends JFrame implements ActionListener
 		if (bibliography.getNumberOfRefs() >= 1)
 		{
 			lookupR.setEnabled(true);
+			exportTXT.setEnabled(true);
 		}
 		
 		outputArea.setText(message);

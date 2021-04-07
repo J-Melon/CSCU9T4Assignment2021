@@ -2,6 +2,7 @@ package com.stir.cscu9t4assignment2021;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,6 +24,11 @@ public class RefCollection
 	 */
 	public void addCitation(Ref reference) { refList.add(reference); }
 	
+	/**
+	 * Searches for references containing a specific journal.
+	 * @param journal journal to be searched
+	 * @return references concatenated into a string
+	 */
 	public String lookupByJournal(String journal)
 	{
 		ListIterator<Ref> iter = refList.listIterator();
@@ -53,11 +59,15 @@ public class RefCollection
 		return resultStr.toString();
 	}
 	
+	/**
+	 * Searches for references containing a specific venue.
+	 * @param venue venue to be searched
+	 * @return references concatenated into a string
+	 */
 	public String lookupByVenue(String venue)
 	{
 		ListIterator<Ref> iter = refList.listIterator();
 		ArrayList<Ref> results = new ArrayList<>();
-		
 		
 		while (iter.hasNext())
 		{
@@ -84,6 +94,11 @@ public class RefCollection
 		return resultStr.toString();
 	}
 	
+	/**
+	 * Searches for references containing a specific publisher.
+	 * @param publisher publisher to be searched
+	 * @return references concatenated into a string
+	 */
 	public String lookupByPublisher(String publisher)
 	{
 		ListIterator<Ref> iter = refList.listIterator();
@@ -115,11 +130,14 @@ public class RefCollection
 		return resultStr.toString();
 	}
 	
+	/**
+	 * Sorts an array list of references alphabetically by the first author starting from first name.
+	 * @param arrList list of references
+	 */
 	public static void sort(ArrayList<Ref> arrList)
 	{
 		Ref temp;
 		
-		//Sort results arraylist for author alphabetically
 		for (int i = 0; i < arrList.size() - 1; i++)
 		{
 			for (int j = i + 1; j < arrList.size(); j++)
@@ -182,6 +200,12 @@ public class RefCollection
 		return authors; //Passed
 	}
 	
+	/**
+	 * Parses a CSV into references which are added to refList.
+	 * @param path path of CSV file
+	 * @param refType type of reference CSV contains from: "all", "journal", "conference", "book chapter"
+	 * @return result string to be outputted
+	 */
 	public String importCSV(String path, String refType)
 	{
 		File file = new File(path);
@@ -283,6 +307,7 @@ public class RefCollection
 					}
 				}
 				
+				//Decides reference type per record
 				if (! scanJournal.isBlank() && ! scanVolume.isBlank() && ! scanIssue.isBlank())
 				{
 					reference = new RefJournal(scanTitle, authors, scanDOI, scanPublisher, pubYear, calendar,
@@ -299,7 +324,6 @@ public class RefCollection
 							scanBook, scanEditor);
 				}
 				
-				System.out.println(reference.getCitation());
 				addCitation(reference);
 			}
 			
@@ -317,6 +341,44 @@ public class RefCollection
 	}
 	
 	/**
+	 * Exports references as a sorted test file.
+	 * @return result string to be outputted
+	 */
+	public String exportTXT()
+	{
+		ListIterator<Ref> iter = refList.listIterator(); //***************SORT IT FOOL
+		String filename = new File("").getAbsolutePath() + "\\" +
+				new SimpleDateFormat("mmss-").format(new Date()) + "References" + ".txt";
+		StringBuilder references = new StringBuilder();
+		
+		while (iter.hasNext())
+		{
+			String current = iter.next().getCitation();
+			references.append(current);
+		}
+		
+		File outFile = new File(new File(filename).getAbsolutePath());
+		
+		try
+		{
+			if (outFile.createNewFile())
+			{
+				System.out.println();
+				PrintWriter wri = new PrintWriter(outFile);
+				wri.write(references.toString());
+				wri.close();
+				return "Exported to TXT successfully.\nFile created at: " + outFile.getAbsolutePath();
+			}
+			else { return("Error: File already exists."); }
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			return ("Error: IO exception.");
+		}
+	}
+	
+	/**
 	 * Checks if year is not negative and less than current year
 	 * @param year a year
 	 * @return boolean fail/pass
@@ -331,7 +393,7 @@ public class RefCollection
 	 * @param day a day
 	 * @param month a month
 	 * @param year a year
-	 * @return
+	 * @return validated calendar
 	 */
 	public Calendar isValidDate(int day, int month, int year)
 	{
@@ -353,7 +415,7 @@ public class RefCollection
 	
 	/**
 	 * Checks if given date is valid
-	 * @param calendar
+	 * @param calendar a calendar
 	 * @return validated calendar
 	 */
 	public Calendar isValidDate(Calendar calendar)
@@ -379,19 +441,5 @@ public class RefCollection
 	public int getNumberOfRefs()
 	{
 		return refList.size();
-	}
-	
-	public String[] removeNull(String[] a)
-	{
-		ArrayList<String> removedNull = new ArrayList<>();
-		for (String str : a)
-		{
-			if (str != null)
-			{
-				removedNull.add(str);
-			}
-		}
-		
-		return removedNull.toArray(new String[0]);
 	}
 }
