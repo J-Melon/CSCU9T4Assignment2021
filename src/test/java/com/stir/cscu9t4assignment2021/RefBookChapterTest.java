@@ -15,9 +15,6 @@ import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * @author saemundur
- */
 public class RefBookChapterTest
 {
 	
@@ -51,7 +48,7 @@ public class RefBookChapterTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		RefBookChapter instance = new RefBookChapter("Becoming Sentient: Choreographies of Caring and Killing",
-				authors, "https://doi.org/10.1525/9780520961838", "University of California Press",
+				authors, "10.1525/9780520961838", "University of California Press",
 				2015, dateAdded, "Becoming salmon", "Darra Goldstein");
 		String expResult = "Becoming salmon";
 		String result = instance.getBook();
@@ -68,7 +65,7 @@ public class RefBookChapterTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		RefBookChapter instance = new RefBookChapter("Becoming Sentient: Choreographies of Caring and Killing",
-				authors, "https://doi.org/10.1525/9780520961838", "University of California Press",
+				authors, "10.1525/9780520961838", "University of California Press",
 				2015, dateAdded, "Becoming salmon", "Darra Goldstein");
 		String expResult = "Darra Goldstein";
 		String result = instance.getEditor();
@@ -85,11 +82,11 @@ public class RefBookChapterTest
 		Calendar dateAdded = Calendar.getInstance();;
 		dateAdded.set(2021, Calendar.MARCH, 25);
 		RefBookChapter instance = new RefBookChapter("Becoming Sentient: Choreographies of Caring and Killing",
-				authors, "https://doi.org/10.1525/9780520961838", "University of California Press",
+				authors, "10.1525/9780520961838", "University of California Press",
 				2015, dateAdded, "Becoming salmon", "Darra Goldstein");
 		String expResult = "Marianne Lien, 2015, 'Becoming Sentient: Choreographies of Caring and Killing', " +
 				"in Darra Goldstein (ed) Becoming " + "salmon, University of California Press, " +
-				"DOI: https://doi.org/10.1525/9780520961838, Accessed: 25/03/2021.\n";
+				"DOI: 10.1525/9780520961838, Accessed: 25/03/2021.\n";
 		String result = instance.getCitation();
 		assertEquals(expResult, result);
 	}
