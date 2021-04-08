@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.util.Calendar;
 import javax.swing.*;
 
+//-----MAKE SURE TO LOOK AT README-----//
 public class RefSystemGUI extends JFrame implements ActionListener
 {
 	//-----GUI DECLARATION-----//

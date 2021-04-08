@@ -34,6 +34,7 @@ public class RefCollection
 		ListIterator<Ref> iter = refList.listIterator();
 		ArrayList<Ref> results = new ArrayList<>();
 		
+		//Search list
 		while (iter.hasNext())
 		{
 			Ref current = iter.next();
@@ -48,6 +49,7 @@ public class RefCollection
 		iter = results.listIterator();
 		StringBuilder resultStr = new StringBuilder();
 		
+		//Iterate list to get string
 		while (iter.hasNext())
 		{
 			Ref current = iter.next();
@@ -77,6 +79,7 @@ public class RefCollection
 		ListIterator<Ref> iter = refList.listIterator();
 		ArrayList<Ref> results = new ArrayList<>();
 		
+		//Search list
 		while (iter.hasNext())
 		{
 			Ref current = iter.next();
@@ -90,6 +93,7 @@ public class RefCollection
 		iter = results.listIterator();
 		StringBuilder resultStr = new StringBuilder();
 		
+		//Iterate list to get string
 		while (iter.hasNext())
 		{
 			Ref current = iter.next();
@@ -119,7 +123,7 @@ public class RefCollection
 		ListIterator<Ref> iter = refList.listIterator();
 		ArrayList<Ref> results = new ArrayList<>();
 		
-		
+		//Search list
 		while (iter.hasNext())
 		{
 			Ref current = iter.next();
@@ -133,6 +137,7 @@ public class RefCollection
 		iter = results.listIterator();
 		StringBuilder resultStr = new StringBuilder();
 		
+		//Iterate list to get string
 		while (iter.hasNext())
 		{
 			Ref current = iter.next();
@@ -369,12 +374,12 @@ public class RefCollection
 	public String exportTXT()
 	{
 		sort(refList);
-		
-		ListIterator<Ref> iter = refList.listIterator(); //***************SORT IT FOOL
+		ListIterator<Ref> iter = refList.listIterator();
 		String pathname = new File("").getAbsolutePath() + "\\" +
 				new SimpleDateFormat("mmss-").format(new Date()) + "References" + ".txt";
 		StringBuilder references = new StringBuilder();
 		
+		//Iterate list to get string
 		while (iter.hasNext())
 		{
 			String current = iter.next().getCitation();
@@ -430,7 +435,7 @@ public class RefCollection
 		
 		try
 		{
-			calendar.set(year, month, day); //As January = 0
+			calendar.set(year, month, day);
 			calendar.getTime(); //To throw exception as check done lazily
 		}
 		catch (Exception e)
@@ -442,7 +447,7 @@ public class RefCollection
 	}
 	
 	/**
-	 * Checks if given date is valid
+	 * Checks if given date is valid (overload)
 	 * @param calendar a calendar
 	 * @return validated calendar
 	 */
